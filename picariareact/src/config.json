@@ -1,0 +1,10 @@
+{
+	"bitbucketApi": "https://bitbucket.org/api/2.0",
+	"spideyApi": "https://localhost:5001/api",
+	"spideyHub": "http://localhost:5000",
+	"developers": [ "OskarCukrowicz", "przemyslawczajka", "szymonbandowski" ],
+	"repoData": {
+		"owner": "OskarCukrowicz",
+		"repoName": "spidey.net"
+	}
+}

@@ -1,0 +1,90 @@
+.headerGrid {
+	display: grid;
+	grid-template-columns: 1fr 5fr 1fr;
+	grid-template-rows: 4fr 1fr 2fr 1fr;
+	max-height: 150px;
+	background-color: white;
+}
+
+.headerOne {
+	grid-column: 2 /3;
+	grid-row: 1/2;
+}
+
+.headerTwo {
+	grid-column: 1/4;
+	grid-row: 2/3;
+	width: 100%;
+}
+
+.headerThree {
+	grid-column: 2 /3;
+	grid-row: 3/4;
+}
+
+.headerFour {
+	grid-column: 1 /4;
+	grid-row: 4/5;
+	width: 100%;
+}
+
+.header {
+	grid-column: 1 /4;
+	grid-row: 1 / 2;
+}
+.selected {
+	color: red;
+}
+
+a.navbarLink:link {
+	text-decoration: inherit;
+	color: inherit;
+	cursor: default;
+}
+
+a.navbarLink:visited {
+	text-decoration: inherit;
+	color: inherit;
+	cursor: default;
+}
+
+a.navbarLink:hover {
+	border-bottom: solid;
+	border-bottom-width: 3px;
+	border-bottom-color: cornflowerblue;
+	padding-bottom: 21px;
+	color: cornflowerblue;
+	cursor: default;
+}
+
+.selected {
+	border-bottom: solid;
+	border-bottom-width: 3px;
+	border-bottom-color: cornflowerblue;
+	padding-bottom: 21px;
+	color: cornflowerblue !important;
+}
+
+.notificationContainer {
+	width: 200px;
+}
+.notificationHr {
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+.notificationFont {
+	font-size: 0.9rem;
+}
+.dot {
+	height: 10px;
+	width: 10px;
+	background-color: red;
+	border-radius: 50%;
+	display: inline-block;
+	position: relative;
+	left: -7px;
+	bottom: -4px;
+}
+.noNotificationBell {
+	margin-right: 10px;
+}
