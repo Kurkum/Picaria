@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import * as PIXI from 'pixi.js';
 import myImage from '../../logo.svg';
-import { GetGameboard, GetDots } from './gameEngine/gameboard';
-
+import { GetGameboard, BuildDot, BuildViableMovesSigns } from './gameEngine/gameboard';
+import { PicariaEngine } from './gameEngine/game';
 export default class play extends Component {
 	constructor(props) {
 		super(props);
 		this.pixiContainer = null;
 		this.app = new PIXI.Application(800, 600, { backgroundColor: 0xffffff });
+		this.engine = new PicariaEngine();
 	}
 
 	updatePixiContainer = (element) => {
@@ -22,13 +23,16 @@ export default class play extends Component {
 	setup = () => {
 		PIXI.loader.add('avatar', myImage).load(this.initialize);
 	};
+
 	initialize = () => {
 		var gameboard = GetGameboard();
-		var dot = GetDots();
-
 		this.app.stage.addChild(gameboard);
 
-		this.app.stage.addChild(dot);
+		var positions = BuildViableMovesSigns(this.engine.Positions, this.engine.PawnClick);
+		this.engine.setDots(positions);
+		positions.forEach((element) => {
+			this.app.stage.addChild(element);
+		});
 	};
 	render() {
 		return <div className="mt-5" ref={this.updatePixiContainer} />;

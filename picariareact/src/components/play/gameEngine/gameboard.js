@@ -1,6 +1,12 @@
 import * as PIXI from 'pixi.js';
 const lineWidht = 2;
 const lineColorBlack = 0x000000;
+
+var gameStates = {
+	PawnSetup: 'pawnsetup',
+	PawnMove: 'pawnmove'
+};
+
 export function GetGameboard() {
 	var board = new PIXI.Graphics();
 	board.lineStyle(lineWidht, lineColorBlack);
@@ -60,20 +66,21 @@ export function GetGameboard() {
 	return board;
 }
 
-export function GetDots() {
+export function BuildViableMovesSigns(positions, onclickHandler) {
+	var signs = [];
 	var circleRadius = 8;
-	var dotOne = new PIXI.Graphics();
+	positions.forEach((position) => {
+		var sign = new PIXI.Graphics();
 
-	dotOne.beginFill(lineColorBlack, 1);
-	dotOne.drawCircle(50, 50, circleRadius);
-	dotOne.endFill();
-	dotOne.interactive = true;
-	dotOne.buttonMode = true;
-	dotOne.click = function(e) {
-		var lol = 'Xd';
-		console.log(lineWidht);
-	};
-	dotOne.hitArea = new PIXI.Circle(50, 50, circleRadius);
+		sign.interactive = true;
+		sign['pos'] = position;
+		sign.buttonMode = true;
+		sign.click = (e) => {
+			onclickHandler(e);
+		};
+		sign.hitArea = new PIXI.Circle(position.x, position.y, circleRadius);
+		signs.push(sign);
+	});
 
-	return dotOne;
+	return signs;
 }
