@@ -24,15 +24,4 @@ namespace PicariaWebApp.Controllers
         }
     }
 
-    public class Board
-    {
-        public List<RootObject> Positions { get; set; }
-    }
-
-    public class RootObject
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public string Status { get; set; }
-    }
 }
