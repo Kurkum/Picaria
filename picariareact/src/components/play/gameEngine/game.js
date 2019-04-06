@@ -19,7 +19,7 @@ const players = {
 
 const moveStates = {
 	PickingPawn: 'pickingpawn',
-	MovingPanw: 'movingpawn'
+	MovingPawn: 'movingpawn'
 };
 
 export class PicariaEngine {
@@ -59,6 +59,14 @@ export class PicariaEngine {
 				this.drawCircle(dot, colors.PlayerOne);
 			}
 		} else {
+			if (dot.pos.status == PositionStatus.PlayerOne) {
+				this.selectedPawn = dot;
+			}
+			if (dot.pos.status == PositionStatus.FreeToCapture && this.selectedPawn != null) {
+				this.selectedPawn.pos.status = PositionStatus.FreeToCapture;
+				dot.pos.status = PositionStatus.PlayerOne;
+				validMoveCompleted = true;
+			}
 		}
 
 		if (validMoveCompleted) {
@@ -81,8 +89,29 @@ export class PicariaEngine {
 		axios
 			.post('https://localhost:5001/api/Picaria/Move', JSON.stringify(this.Positions), { headers: headers })
 			.then((response) => {
-				console.log(response);
-				debugger;
+				response.data.forEach((position) => {
+					var dot = this.dots.find((dot) => dot.pos.x == position.x && dot.pos.y == position.y);
+					dot.pos.status =
+						position.status == 0
+							? PositionStatus.PlayerOne
+							: position.status == 1 ? PositionStatus.PlayerTwo : PositionStatus.FreeToCapture;
+
+					if (position.status != 2) {
+						var color =
+							position.status == 0
+								? colors.PlayerOne
+								: position.status == 1 ? colors.PlayerTwo : colors.FreeToCapture;
+
+						this.drawCircle(dot, color);
+					} else {
+						dot.clear();
+					}
+				});
+
+				if (this.Positions.filter((x) => x.status == PositionStatus.PlayerOne).length === 3) {
+					this.GameState = gameStates.PawnMovement;
+				}
+				this.CurrentMove = players.PlayerOne;
 			});
 	};
 }

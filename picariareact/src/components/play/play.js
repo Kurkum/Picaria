@@ -35,6 +35,10 @@ export default class play extends Component {
 		});
 	};
 	render() {
-		return <div className="mt-5" ref={this.updatePixiContainer} />;
+		return (
+			<div className="d-flex justify-content-center">
+				<div className="mt-5" ref={this.updatePixiContainer} />
+			</div>
+		);
 	}
 }

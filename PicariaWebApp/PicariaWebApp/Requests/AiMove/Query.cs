@@ -16,9 +16,29 @@ namespace PicariaWebApp.Requests.AiMove
     {
         public async Task<List<Position>> Handle(Query request, CancellationToken cancellationToken)
         {
-            request.Board.FirstOrDefault(x => x.Status == Status.FreeToCapture).Status = Status.PlayerTwo;
+            if(request.Board.Count(x=>x.Status == Status.PlayerTwo) == 3)
+            {
+                MovingPawns(request.Board);
+            }
+            else
+            {
+                SettingUpPawns(request.Board);
+            }
 
             return request.Board;
         }
+
+        private void SettingUpPawns(List<Position> board)
+        {
+            board.FirstOrDefault(x => x.Status == Status.FreeToCapture).Status = Status.PlayerTwo;
+        }
+
+        private void MovingPawns(List<Position> board)
+        {
+            var newPosition = board.FirstOrDefault(x => x.Status == Status.FreeToCapture);
+            board.FirstOrDefault(x => x.Status == Status.PlayerTwo).Status = Status.FreeToCapture;
+            newPosition.Status = Status.PlayerTwo;
+        }
+
     }
 }
