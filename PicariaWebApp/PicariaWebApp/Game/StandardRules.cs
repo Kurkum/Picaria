@@ -21,5 +21,22 @@ namespace PicariaWebApp.Game
             }
             return ret;
         }
+
+        public List<Tuple<Position, Position>> GetPossibleMovesOfPlayer(List<Position> board, Status player)
+        {
+            List<Tuple<Position, Position>> ret = new List<Tuple<Position, Position>>();
+            foreach (Position e in board)
+            {
+                if (e.Status == player)
+                {
+                    List<Position> possibleMoves = GetPossibleMovesOfPawn(board, e);
+                    foreach (Position e2 in possibleMoves)
+                    {
+                        ret.Add(Tuple.Create(e, e2));
+                    }
+                }
+            }
+            return ret;
+        }
     }
 }
