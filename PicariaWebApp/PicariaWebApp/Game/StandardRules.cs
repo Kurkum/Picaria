@@ -22,9 +22,9 @@ namespace PicariaWebApp.Game
             return ret;
         }
 
-        public List<Tuple<Position, Position>> GetPossibleMovesOfPlayer(List<Position> board, Status player)
+        public List<Move> GetPossibleMovesOfPlayer(List<Position> board, Status player)
         {
-            List<Tuple<Position, Position>> ret = new List<Tuple<Position, Position>>();
+            List<Move> ret = new List<Move>();
             foreach (Position e in board)
             {
                 if (e.Status == player)
@@ -32,7 +32,7 @@ namespace PicariaWebApp.Game
                     List<Position> possibleMoves = GetPossibleMovesOfPawn(board, e);
                     foreach (Position e2 in possibleMoves)
                     {
-                        ret.Add(Tuple.Create(e, e2));
+                        ret.Add(new Move(e, e2));
                     }
                 }
             }
