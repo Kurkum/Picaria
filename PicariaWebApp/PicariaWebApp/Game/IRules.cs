@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PicariaWebApp.Game
 {
-    interface IRules
+    public interface IRules
     {
         List<Position> GetPossibleMovesOfPawn(List<Position> board, Position pawnPostion);
         List<Move> GetPossibleMovesOfPlayer(List<Position> board, Status player);
