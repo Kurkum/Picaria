@@ -9,22 +9,22 @@ namespace PicariaWebApp.Player
 {
     public class Rating
     {
-        private int rateBoard(List<Position> BoardState)
+        private int RateBoard(List<Position> boardState)
         { //tylko dla liści! powinno działać, gdy mniej niż 3 pionki - poza pierwszym ruchem chyba i tylko gdy już po 3 pionki!
-            if (BoardState.Count() == 9)
+            if (boardState.Count() == 9)
             {
                 List<Position> computer = new List<Position>();
                 List<Position> player = new List<Position>();
 
-                for (int c = 0; c < BoardState.Count(); c++)
+                for (int c = 0; c < boardState.Count(); c++)
                 {
-                    if (BoardState[c].Status == Status.PlayerTwo)
+                    if (boardState[c].Status == Status.PlayerTwo)
                     {
-                        computer.Add(BoardState[c]);
+                        computer.Add(boardState[c]);
                     }
-                    if (BoardState[c].Status == Status.PlayerOne)
+                    if (boardState[c].Status == Status.PlayerOne)
                     {
-                        player.Add(BoardState[c]);
+                        player.Add(boardState[c]);
                     }
                 }
 
@@ -52,41 +52,40 @@ namespace PicariaWebApp.Player
                 //if środek
                 if (computer.Count > 0)
                 {
-                    if (BoardState[4].Status == Status.PlayerTwo) return 1;
+                    if (boardState[4].Status == Status.PlayerTwo) return 1;
                 }
             }
             return -1;//absolutnie każdy inny przypadek, np. brak środka
         }
 
-        private void rateLast(GameTree Tree, int WhichFloorRated/*4*/)
+        private void RateLast(GameTree tree, int whichFloorRated/*4*/)
         {
-            if (WhichFloorRated == Tree.CurrentDepth)
+            if (whichFloorRated == tree.CurrentDepth)
             {
-                //Tree.Rating = RateBoard(Tree.BoardState);//////////////////////////////////////////////
+                //tree.Rating = RateBoard(Tree.BoardState);//////////////////////////////////////////////
             }
             else
             {
-                int HowMany = Tree.Children.Count();
+                int HowMany = tree.Children.Count();
                 if (HowMany > 0)
                 {
                     for (int c = 0; c < HowMany; c++)
                     {
-                        rateLast(Tree.Children[c], WhichFloorRated);
+                        RateLast(tree.Children[c], whichFloorRated);
                     }
                 }
             }
         }
 
-        private void rateSecond(GameTree Tree, int WhichFloorRated/*2*/)
+        private void RateSecond(GameTree tree, int whichFloorRated/*2*/)
         {//użyj PO RateLast i po podliczeniu ocen poszczególnych elementów
-            if (WhichFloorRated == Tree.CurrentDepth)
+            if (whichFloorRated == tree.CurrentDepth)
             {
-                List<Position> BoardState = Tree.BoardState;
+                List<Position> BoardState = tree.BoardState;
 
                 if (BoardState.Count() == 9)
                 {
                     List<Position> computer = new List<Position>();
-
 
                     for (int c = 0; c < BoardState.Count(); c++)
                     {
@@ -94,34 +93,37 @@ namespace PicariaWebApp.Player
                     }
 
                     //if wygrana
-                    if (computer.Count() == 3) if (computer[0].X - computer[1].X == computer[1].X - computer[2].X &&
+                    if (computer.Count() == 3)
+                    {
+                        if (computer[0].X - computer[1].X == computer[1].X - computer[2].X &&
                                    computer[0].Y - computer[1].Y == computer[1].Y - computer[2].Y)
                         {
                             //Tree.Rating = 2;//////////////////////////////////////////////
                         }
+                    }
                 }
             }
             else
             {
-                int HowMany = Tree.Children.Count();
+                int HowMany = tree.Children.Count();
                 if (HowMany > 0)
                 {
                     for (int c = 0; c < HowMany; c++)
                     {
-                        rateLast(Tree.Children[c], WhichFloorRated);
+                        RateLast(tree.Children[c], whichFloorRated);
                     }
                 }
             }
         }
 
-        public void rateAll(GameTree Tree)
-        {       //oceń piętro 2 i 4, koniecznie osobne algorytmy
-            rateLast(Tree, Tree.MaximumDepth);
+        public void RateAll(GameTree tree)
+        {//oceń piętro 2 i 4, koniecznie osobne algorytmy
+            RateLast(tree, tree.MaximumDepth);
 
             //TO DO
             //alfabeta dla przeniesienia ocen
 
-            rateSecond(Tree, 2);//dla drugiego piętra
+            RateSecond(tree, 2);//dla drugiego piętra
         }
 
     }
