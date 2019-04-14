@@ -8,10 +8,10 @@ namespace PicariaWebApp.Game
 {
     public class StandardRules : IRules
     {
-        public List<Position> GetPossibleMovesOfPawn(List<Position> board, Position pawnPostion)
+        public List<Position> GetPossibleMovesOfPawn(Board board, Position pawnPostion)
         {
             List<Position> ret = new List<Position>();
-            foreach (Position e in board)
+            foreach (Position e in board.Positions)
             {
                 if (e.Status == Status.FreeToCapture && (e.X == pawnPostion.X || e.X == pawnPostion.X - 1 || e.X == pawnPostion.X + 1) &&
                     (e.Y == pawnPostion.Y || e.Y == pawnPostion.Y - 1 || e.Y == pawnPostion.Y + 1))
@@ -22,10 +22,10 @@ namespace PicariaWebApp.Game
             return ret;
         }
 
-        public List<Move> GetPossibleMovesOfPlayer(List<Position> board, Status player)
+        public List<Move> GetPossibleMovesOfPlayer(Board board, Status player)
         {
             List<Move> ret = new List<Move>();
-            foreach (Position e in board)
+            foreach (Position e in board.Positions)
             {
                 if (e.Status == player)
                 {

@@ -8,7 +8,7 @@ namespace PicariaWebApp.Game
 {
     public interface IRules
     {
-        List<Position> GetPossibleMovesOfPawn(List<Position> board, Position pawnPostion);
-        List<Move> GetPossibleMovesOfPlayer(List<Position> board, Status player);
+        List<Position> GetPossibleMovesOfPawn(Board board, Position pawnPostion);
+        List<Move> GetPossibleMovesOfPlayer(Board board, Status player);
     }
 }

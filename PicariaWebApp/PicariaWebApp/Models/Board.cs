@@ -9,6 +9,7 @@ namespace PicariaWebApp.Models
     public class Board
     {
         public List<Position> Positions { get; set; }
+        public IRules Rules;
 
         Board()
         {
