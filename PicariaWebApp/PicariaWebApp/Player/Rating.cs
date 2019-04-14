@@ -9,7 +9,7 @@ namespace PicariaWebApp.Player
 {
     public class Rating
     {
-        private int RateBoard(List<Position> BoardState)
+        private int rateBoard(List<Position> BoardState)
         { //tylko dla liści! powinno działać, gdy mniej niż 3 pionki - poza pierwszym ruchem chyba i tylko gdy już po 3 pionki!
             if (BoardState.Count() == 9)
             {
@@ -18,32 +18,47 @@ namespace PicariaWebApp.Player
 
                 for (int c = 0; c < BoardState.Count(); c++)
                 {
-                    if (BoardState[c].Status == Status.PlayerTwo) computer.Add(BoardState[c]);
-                    if (BoardState[c].Status == Status.PlayerOne) player.Add(BoardState[c]);
+                    if (BoardState[c].Status == Status.PlayerTwo)
+                    {
+                        computer.Add(BoardState[c]);
+                    }
+                    if (BoardState[c].Status == Status.PlayerOne)
+                    {
+                        player.Add(BoardState[c]);
+                    }
                 }
 
                 //if przegrana - kolejność tych ifów z returnami bardzo ważna - mówi o hierarchii
                 //podwójny if - żeby nie próbował odpalić tego drugiego warunku?
-                if (player.Count() == 3) if (player[0].X - player[1].X == player[1].X - player[2].X &&
+                if (player.Count() == 3)
+                {
+                    if (player[0].X - player[1].X == player[1].X - player[2].X &&
                                    player[0].Y - player[1].Y == player[1].Y - player[2].Y)
-                    {
+                    {//warunek linii
                         return -2;
                     }
+                }
 
                 //if wygrana
-                if (computer.Count() == 3) if (computer[0].X - computer[1].X == computer[1].X - computer[2].X &&
+                if (computer.Count() == 3)
+                {
+                    if (computer[0].X - computer[1].X == computer[1].X - computer[2].X &&
                                    computer[0].Y - computer[1].Y == computer[1].Y - computer[2].Y)
                     {
                         return 2;
                     }
+                }
 
                 //if środek
-                if (computer.Count > 0) if (BoardState[4].Status == Status.PlayerTwo) return 1;
+                if (computer.Count > 0)
+                {
+                    if (BoardState[4].Status == Status.PlayerTwo) return 1;
+                }
             }
             return -1;//absolutnie każdy inny przypadek, np. brak środka
         }
 
-        private void RateLast(GameTree Tree, int WhichFloorRated/*4*/)
+        private void rateLast(GameTree Tree, int WhichFloorRated/*4*/)
         {
             if (WhichFloorRated == Tree.CurrentDepth)
             {
@@ -56,13 +71,13 @@ namespace PicariaWebApp.Player
                 {
                     for (int c = 0; c < HowMany; c++)
                     {
-                        RateLast(Tree.Children[c], WhichFloorRated);
+                        rateLast(Tree.Children[c], WhichFloorRated);
                     }
                 }
             }
         }
 
-        private void RateSecond(GameTree Tree, int WhichFloorRated/*2*/)
+        private void rateSecond(GameTree Tree, int WhichFloorRated/*2*/)
         {//użyj PO RateLast i po podliczeniu ocen poszczególnych elementów
             if (WhichFloorRated == Tree.CurrentDepth)
             {
@@ -93,20 +108,20 @@ namespace PicariaWebApp.Player
                 {
                     for (int c = 0; c < HowMany; c++)
                     {
-                        RateLast(Tree.Children[c], WhichFloorRated);
+                        rateLast(Tree.Children[c], WhichFloorRated);
                     }
                 }
             }
         }
 
-        private void RateAll(GameTree Tree)
+        public void rateAll(GameTree Tree)
         {       //oceń piętro 2 i 4, koniecznie osobne algorytmy
-            RateLast(Tree, Tree.MaximumDepth);
+            rateLast(Tree, Tree.MaximumDepth);
 
             //TO DO
             //alfabeta dla przeniesienia ocen
 
-            RateSecond(Tree, 2);//dla drugiego piętra
+            rateSecond(Tree, 2);//dla drugiego piętra
         }
 
     }
