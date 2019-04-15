@@ -9,12 +9,20 @@ namespace PicariaWebApp.Models
     public class Board
     {
         public List<Position> Positions { get; set; }
-        public static List<Position> EmptyBoard = new List<Position>()
+        public static readonly List<Position> EmptyBoard = new List<Position>()
         {
-            new Position()
+            new Position(0,0),
+            new Position(1,0),
+            new Position(2,0),
+
+            new Position(0,1),
+            new Position(1,1),
+            new Position(2,1),
+
+            new Position(0,2),
+            new Position(1,2),
+            new Position(2,2)
         };
-
-
         public IRules Rules;
 
         public Board()

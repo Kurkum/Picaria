@@ -41,6 +41,13 @@ namespace PicariaWebApp.Models
             Status = status;
         }
 
+        public Position(int x, int y)
+        {
+            X = x;
+            Y = y;
+            Status = Status.FreeToCapture;
+        }
+
         public Position Clone()
         {
             return this.MemberwiseClone() as Position;
