@@ -58,11 +58,11 @@ namespace PicariaWebApp.Models
             oldPosiotion.Status = Status.FreeToCapture;
             foreach(Position position in Positions)
             {
-                if (position.HaveSameCoordinates(oldPosiotion))
+                if (position.Equals(oldPosiotion))
                 {
                     board.Positions.Add(oldPosiotion);
                 }
-                else if (position.HaveSameCoordinates(newPosition))
+                else if (position.Equals(newPosition))
                 {
                     board.Positions.Add(newPosition);
                 }
