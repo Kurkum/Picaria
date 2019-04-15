@@ -11,13 +11,39 @@ namespace PicariaWebApp.Models
         public int Y { get; set; }
         public Status Status { get; set; }
 
+        private Dictionary<int, int> XPositionToRealPosition = new Dictionary<int, int>
+        {
+            {50,  0},
+            {400, 1},
+            {750, 2}
+        };
+        private Dictionary<int, int> YPositionToRealPosition = new Dictionary<int, int>
+        {
+            {50,  0},
+            {300, 1},
+            {550, 2}
+        };
+
+        public void TranslatePosition()
+        {
+            this.X = XPositionToRealPosition[this.X];
+            this.Y = YPositionToRealPosition[this.Y];
+        }
+        public Position()
+        {
+
+        }
+
+        public Position(int x, int y, Status status)
+        {
+            X = x;
+            Y = y;
+            Status = status;
+        }
+
         public Position Clone()
         {
-            Position clone = new Position();
-            clone.Status = Status;
-            clone.X = X;
-            clone.Y = Y;
-            return clone;
+            return this.MemberwiseClone() as Position;
         }
 
         public bool HaveSameCoordinates(Position position)

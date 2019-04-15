@@ -9,19 +9,35 @@ namespace PicariaWebApp.Models
     public class Board
     {
         public List<Position> Positions { get; set; }
+        public static List<Position> EmptyBoard = new List<Position>()
+        {
+            new Position()
+        };
+
+
         public IRules Rules;
 
-        Board()
+        public Board()
         {
             Positions = new List<Position>();
         }
 
-        public void RealizeMove(Move move)
+        public Board(List<Position> positions)
+        {
+            foreach(var position in positions)
+            {
+                position.TranslatePosition();
+            }
+
+            Positions = positions;
+        }
+
+        public void ExecuteMove(Move move)
         {
             move.NewPosition.Status = move.OldPosition.Status;
             move.OldPosition.Status = Status.FreeToCapture;
         }
-        public Board GetCopyOfBoardWithMoveRealized(Move move)
+        public Board GetCopyOfBoardWithMoveExecuted(Move move)
         {
             Board board = new Board();
             Position oldPosiotion = move.OldPosition.Clone();
