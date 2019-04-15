@@ -49,7 +49,7 @@ namespace PicariaWebApp.Player
                     }
                     foreach (Move move in possibleMoves)
                     {
-                        Children.Add(new GameTree(BoardState.GetCopyOfBoardWithMoveRealized(move), nextPlayer, MaximumDepth, CurrentDepth + 1));
+                        Children.Add(new GameTree(BoardState.GetCopyOfBoardWithMoveExecuted(move), nextPlayer, MaximumDepth, CurrentDepth + 1));
                     }
                 }
                 foreach (GameTree child in Children)
