@@ -9,8 +9,8 @@ namespace PicariaWebApp.Player
 {
     public class Rating
     {
-        private int RateBoard(List<Position> boardState)
-        { //tylko dla liści! powinno działać, gdy mniej niż 3 pionki - poza pierwszym ruchem chyba i tylko gdy już po 3 pionki!
+        private int RateBoard(List<Position> boardState)//boardstate to teraz cała klasa
+        { //powinno działać, gdy mniej niż 3 pionki - poza pierwszym ruchem chyba i tylko gdy już po 3 pionki!
             if (boardState.Count() == 9)
             {
                 List<Position> computer = new List<Position>();
@@ -62,7 +62,7 @@ namespace PicariaWebApp.Player
         {
             if (whichFloorRated == tree.CurrentDepth)
             {
-                //tree.Rating = RateBoard(Tree.BoardState);//////////////////////////////////////////////
+                tree.Rate = RateBoard(tree.BoardState.Positions);
             }
             else
             {
@@ -81,7 +81,7 @@ namespace PicariaWebApp.Player
         {//użyj PO RateLast i po podliczeniu ocen poszczególnych elementów
             if (whichFloorRated == tree.CurrentDepth)
             {
-                List<Position> BoardState = tree.BoardState;
+                List<Position> BoardState = tree.BoardState.Positions;
 
                 if (BoardState.Count() == 9)
                 {
@@ -98,7 +98,7 @@ namespace PicariaWebApp.Player
                         if (computer[0].X - computer[1].X == computer[1].X - computer[2].X &&
                                    computer[0].Y - computer[1].Y == computer[1].Y - computer[2].Y)
                         {
-                            //Tree.Rating = 2;//////////////////////////////////////////////
+                            tree.Rate = 2;
                         }
                     }
                 }
@@ -116,12 +116,15 @@ namespace PicariaWebApp.Player
             }
         }
 
+
+
         public void RateAll(GameTree tree)
         {//oceń piętro 2 i 4, koniecznie osobne algorytmy
             RateLast(tree, tree.MaximumDepth);
 
             //TO DO
             //alfabeta dla przeniesienia ocen
+            //funkcja zwracająca najlepszy ruch - jako List<Position> Positions
 
             RateSecond(tree, 2);//dla drugiego piętra
         }

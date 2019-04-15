@@ -22,6 +22,7 @@ namespace PicariaWebApp.Player
             this.MaximumDepth = maximumDepth;
             this.BoardState = board;
             this.NextPlayer = nextPlayer;
+            this.Rate = 0;
         }
 
         public void Expand()
