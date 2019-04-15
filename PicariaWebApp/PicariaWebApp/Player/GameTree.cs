@@ -17,28 +17,29 @@ namespace PicariaWebApp.Player
         public List<GameTree> Children { get; set; }
 
 
-        public GameTree(int maximumDepth, Board board, Status nextPlayer)
+        public GameTree(Board board, Status nextPlayer, int maximumDepth, int currentDepth)
         {
-            this.MaximumDepth = maximumDepth;
             this.BoardState = board;
             this.NextPlayer = nextPlayer;
+            this.MaximumDepth = maximumDepth;
+            this.CurrentDepth = currentDepth;
             this.Rate = 0;
         }
 
         public void Expand()
         {
-            if(CurrentDepth== MaximumDepth)
+            if (CurrentDepth == MaximumDepth)
             {
                 return;
             }
             else
             {
-                if(Children == null)
+                if (Children == null)
                 {
                     List<Move> possibleMoves = BoardState.Rules.GetPossibleMovesOfPlayer(BoardState, NextPlayer);
                     Children = new List<GameTree>();
                     Status nextPlayer;
-                    if(NextPlayer == Status.PlayerOne)
+                    if (NextPlayer == Status.PlayerOne)
                     {
                         nextPlayer = Status.PlayerTwo;
                     }
@@ -46,9 +47,9 @@ namespace PicariaWebApp.Player
                     {
                         nextPlayer = Status.PlayerOne;
                     }
-                    foreach(Move move in possibleMoves)
+                    foreach (Move move in possibleMoves)
                     {
-                        Children.Add(new GameTree(MaximumDepth, BoardState.GetCopyOfBoardWithMoveRealized(move), nextPlayer));
+                        Children.Add(new GameTree(BoardState.GetCopyOfBoardWithMoveRealized(move), nextPlayer, MaximumDepth, CurrentDepth + 1));
                     }
                 }
                 foreach (GameTree child in Children)
