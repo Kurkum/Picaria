@@ -53,9 +53,16 @@ namespace PicariaWebApp.Models
             return this.MemberwiseClone() as Position;
         }
 
-        public bool HaveSameCoordinates(Position position)
+
+        public override bool Equals(object obj)
         {
-            return (X == position.X && Y == position.Y);
+            if(obj is Position)
+            {
+                var castedObj = obj as Position;
+                return (X == castedObj.X && Y == castedObj.Y);
+            }
+
+            return base.Equals(obj);
         }
     }
 
