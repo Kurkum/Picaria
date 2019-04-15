@@ -10,6 +10,7 @@ namespace PicariaWebApp.Game
     {
         public Position OldPosition { get; set; }
         public Position NewPosition { get; set; }
+
         public Move(Position oldPosition, Position newPosition)
         {
             this.OldPosition = oldPosition;

@@ -9,6 +9,7 @@ namespace PicariaWebApp.Player
 {
     public class GameTree
     {
+        public int Rate { get; set; }
         public int MaximumDepth { get; set; }
         public int CurrentDepth { get; set; }
         public Board BoardState { get; set; }
