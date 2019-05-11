@@ -59,10 +59,15 @@ namespace PicariaWebApp.Models
             if(obj is Position)
             {
                 var castedObj = obj as Position;
-                return (X == castedObj.X && Y == castedObj.Y);
+                return (X == castedObj.X && Y == castedObj.Y && Status == castedObj.Status);
             }
 
             return base.Equals(obj);
+        }
+
+        public bool HaveSameCoordinates(Position position)
+        {
+            return X == position.X && Y == position.Y;
         }
     }
 
