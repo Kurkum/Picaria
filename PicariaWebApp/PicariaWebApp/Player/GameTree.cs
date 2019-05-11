@@ -22,7 +22,13 @@ namespace PicariaWebApp.Player
             this.MaximumDepth = maximumDepth;
             this.BoardState = board;
             this.NextPlayer = nextPlayer;
+<<<<<<< HEAD
             this.Rate = 0;
+=======
+            this.MaximumDepth = maximumDepth;
+            this.CurrentDepth = currentDepth;
+            this.Rate = -45;
+>>>>>>> parent of 654c60f... Revert "Rating, zmiana działania oceny - dodanie punktowania pozycji pojedynczych pionków, nowe wartości oceny"
         }
 
         public void Expand()
