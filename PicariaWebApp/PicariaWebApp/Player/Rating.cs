@@ -27,7 +27,7 @@ namespace PicariaWebApp.Player {
                 if (player.Count() == 3) {
                     if (player[0].X - player[1].X == player[1].X - player[2].X &&
                                    player[0].Y - player[1].Y == player[1].Y - player[2].Y) {//warunek linii
-                        return -50;
+                        return -2;
                     }
                 }
 
@@ -35,43 +35,17 @@ namespace PicariaWebApp.Player {
                 if (computer.Count() == 3) {
                     if (computer[0].X - computer[1].X == computer[1].X - computer[2].X &&
                                    computer[0].Y - computer[1].Y == computer[1].Y - computer[2].Y) {
-                        return 50;
+                        return 2;
                     }
                 }
 
-                int anotherResult = 0;
-
-                //podliczanie pustej wartości pojedynczych pól
-                for(int c = 0; c < positions.Count(); c++) {
-                    if (c == 0 || c == 2 || c == 6 || c == 8) {
-                        if (positions[c].Status == Status.PlayerTwo) {
-                            anotherResult += 3;
-                        }
-                        if (positions[c].Status == Status.PlayerOne) {
-                            anotherResult -= 3;
-                        }
-                    }
-                    if (c == 1 || c == 3 || c == 5 || c == 7) {
-                        if (positions[c].Status == Status.PlayerTwo) {
-                            anotherResult += 5;
-                        }
-                        if (positions[c].Status == Status.PlayerOne) {
-                            anotherResult -= 5;
-                        }
-                    }
-                    if (c == 4) {
-                        if (positions[c].Status == Status.PlayerTwo) {
-                            anotherResult += 8;
-                        }
-                        if (positions[c].Status == Status.PlayerOne) {
-                            anotherResult -= 8;
-                        }
-                    }
+                //if środek
+                if (positions[4].Status == Status.PlayerTwo) {
+                    return 1;
                 }
-                return anotherResult;
 
             }
-            return -90;//błąd -> podana tablica jest za mała
+            return -1;//absolutnie każdy inny przypadek, w założeniu: brak środka
         }
 
 
@@ -126,4 +100,4 @@ namespace PicariaWebApp.Player {
             }
         }
     }
-}//https://www.youtube.com/watch?v=wXv2uACAAnM
+}

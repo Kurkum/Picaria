@@ -23,7 +23,7 @@ namespace PicariaWebApp.Player
             this.NextPlayer = nextPlayer;
             this.MaximumDepth = maximumDepth;
             this.CurrentDepth = currentDepth;
-            this.Rate = -45;
+            this.Rate = 0;
         }
 
         public void Expand()
