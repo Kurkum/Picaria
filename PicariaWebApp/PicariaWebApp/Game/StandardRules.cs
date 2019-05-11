@@ -10,7 +10,7 @@ namespace PicariaWebApp.Game
     {
         public bool SecondPhaseBegun;
 
-        StandardRules()
+        public StandardRules()
         {
             SecondPhaseBegun = false;
         }
@@ -56,7 +56,7 @@ namespace PicariaWebApp.Game
             {
                 if(e.Status == Status.FreeToCapture)
                 {
-                    ret.Add(new Move(e, e));
+                    ret.Add(new Move(e));
                 }
             }
             return ret;

@@ -31,7 +31,21 @@ namespace PicariaWebApp.Models
 
         public Board()
         {
-            Positions = new List<Position>();
+            Positions = new List<Position>()
+            {
+                new Position(0,0),
+                new Position(1,0),
+                new Position(2,0),
+
+                new Position(0,1),
+                new Position(1,1),
+                new Position(2,1),
+
+                new Position(0,2),
+                new Position(1,2),
+                new Position(2,2)
+            };
+            Rules = new StandardRules();
         }
 
         public Board(List<Position> positions)
@@ -49,6 +63,7 @@ namespace PicariaWebApp.Models
             move.NewPosition.Status = move.OldPosition.Status;
             move.OldPosition.Status = Status.FreeToCapture;
         }
+
         public Board GetCopyOfBoardWithMoveExecuted(Move move)
         {
             Board board = new Board();
@@ -84,6 +99,12 @@ namespace PicariaWebApp.Models
                 }
             }
             return result;
+        }
+
+        public override bool Equals(object obj)
+        {
+            Board that = obj as Board;
+            return this.Positions.Count() == that.Positions.Count() && !this.Positions.Except(that.Positions).Any();
         }
     }
 }
