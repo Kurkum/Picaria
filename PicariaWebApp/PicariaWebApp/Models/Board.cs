@@ -72,5 +72,18 @@ namespace PicariaWebApp.Models
             }
             return board;
         }
+
+        public int CountCapturedPositions()
+        {
+            int result = 0;
+            foreach(Position position in Positions)
+            {
+                if (position.Status != Status.FreeToCapture)
+                {
+                    ++result;
+                }
+            }
+            return result;
+        }
     }
 }
