@@ -5,47 +5,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PicariaWebApp.Player
-{
-    public class Rating
-    {
+namespace PicariaWebApp.Player {
+    public class Rating {
         //powinno działać, gdy mniej niż 3 pionki - poza pierwszym ruchem chyba i tylko gdy już po 3 pionki!
-        public int RateBoard(List<Position> positions)
-        {
-            if (positions.Count() == 9)
-            {
+        public int RateBoard(List<Position> positions) {
+            if (positions.Count() == 9) {
                 List<Position> computer = new List<Position>();
                 List<Position> player = new List<Position>();
 
-                for (int c = 0; c < positions.Count(); c++)
-                {
-                    if (positions[c].Status == Status.PlayerTwo)
-                    {
+                for (int c = 0; c < positions.Count(); c++) {
+                    if (positions[c].Status == Status.PlayerTwo) {
                         computer.Add(positions[c]);
                     }
-                    if (positions[c].Status == Status.PlayerOne)
-                    {
+                    if (positions[c].Status == Status.PlayerOne) {
                         player.Add(positions[c]);
                     }
                 }
 
                 //if przegrana - kolejność tych ifów z returnami bardzo ważna - mówi o hierarchii
                 //podwójny if - żeby nie próbował odpalić tego drugiego warunku?
-                if (player.Count() == 3)
-                {
+                if (player.Count() == 3) {
                     if (player[0].X - player[1].X == player[1].X - player[2].X &&
-                                   player[0].Y - player[1].Y == player[1].Y - player[2].Y)
-                    {//warunek linii
+                                   player[0].Y - player[1].Y == player[1].Y - player[2].Y) {//warunek linii
                         return -50;
                     }
                 }
 
                 //if wygrana
-                if (computer.Count() == 3)
-                {
+                if (computer.Count() == 3) {
                     if (computer[0].X - computer[1].X == computer[1].X - computer[2].X &&
-                                   computer[0].Y - computer[1].Y == computer[1].Y - computer[2].Y)
-                    {
+                                   computer[0].Y - computer[1].Y == computer[1].Y - computer[2].Y) {
                         return 50;
                     }
                 }
@@ -53,38 +42,28 @@ namespace PicariaWebApp.Player
                 int anotherResult = 0;
 
                 //podliczanie pustej wartości pojedynczych pól
-                for (int c = 0; c < positions.Count(); c++)
-                {
-                    if (c == 0 || c == 2 || c == 6 || c == 8)
-                    {
-                        if (positions[c].Status == Status.PlayerTwo)
-                        {
+                for(int c = 0; c < positions.Count(); c++) {
+                    if (c == 0 || c == 2 || c == 6 || c == 8) {
+                        if (positions[c].Status == Status.PlayerTwo) {
                             anotherResult += 3;
                         }
-                        if (positions[c].Status == Status.PlayerOne)
-                        {
+                        if (positions[c].Status == Status.PlayerOne) {
                             anotherResult -= 3;
                         }
                     }
-                    if (c == 1 || c == 3 || c == 5 || c == 7)
-                    {
-                        if (positions[c].Status == Status.PlayerTwo)
-                        {
+                    if (c == 1 || c == 3 || c == 5 || c == 7) {
+                        if (positions[c].Status == Status.PlayerTwo) {
                             anotherResult += 5;
                         }
-                        if (positions[c].Status == Status.PlayerOne)
-                        {
+                        if (positions[c].Status == Status.PlayerOne) {
                             anotherResult -= 5;
                         }
                     }
-                    if (c == 4)
-                    {
-                        if (positions[c].Status == Status.PlayerTwo)
-                        {
+                    if (c == 4) {
+                        if (positions[c].Status == Status.PlayerTwo) {
                             anotherResult += 8;
                         }
-                        if (positions[c].Status == Status.PlayerOne)
-                        {
+                        if (positions[c].Status == Status.PlayerOne) {
                             anotherResult -= 8;
                         }
                     }
@@ -97,8 +76,7 @@ namespace PicariaWebApp.Player
 
 
 
-        public void AlfaBeta(GameTree tree)
-        {
+        public void AlfaBeta(GameTree tree) {
 
             /*dla każdego zrób:
                 jeśli wygrana, oceń na 2 i wyczyść "dzieci"
@@ -106,44 +84,34 @@ namespace PicariaWebApp.Player
                 jeśli nie ma, oceń boardRatem*/
 
             int howMany = tree.Children.Count();
-            if (howMany > 0)
-            {
+            if (howMany > 0) {
 
                 //jeśli jest zwycięzcą, nadaj ocenę i wyczyść dzieci
-                if (tree.CurrentDepth % 2 == 1 && RateBoard(tree.BoardState.Positions) == 2)
-                {//ten kod i tak musiałby być wykonany w znacznej większości
+                if (tree.CurrentDepth%2==1 && RateBoard(tree.BoardState.Positions) == 2) {//ten kod i tak musiałby być wykonany w znacznej większości
                     tree.Rate = 2;
                     tree.Children.Clear();//ODCIĘCIE
                 }
 
                 //jeśli ma dzieci, wykonaj dla każdego, potem dobierz swoją ocenę (wtedy już dzieci miały oceny)
-                else
-                {
-                    for (int c = 0; c < howMany; c++)
-                    {
+                else {
+                    for (int c = 0; c < howMany; c++) {
                         AlfaBeta(tree.Children[c]);
                     }
 
                     //dobierz swoją ocenę
-                    if (tree.CurrentDepth % 2 == 0)
-                    {//pierwszy ruch mój, więc wybieram najlepsze dziecko
+                    if (tree.CurrentDepth % 2 == 0) {//pierwszy ruch mój, więc wybieram najlepsze dziecko
                         int newRate = -2;//początkowo najniższa ocena
-                        for (int c = 0; c < tree.Children.Count(); c++)
-                        {
-                            if (tree.Children[c].Rate > newRate)
-                            {
+                        for (int c = 0; c < tree.Children.Count(); c++) {
+                            if (tree.Children[c].Rate > newRate) {
                                 newRate = tree.Children[c].Rate;
                             }
                         }
                         tree.Rate = newRate;
                     }
-                    else if (tree.CurrentDepth % 2 == 1)
-                    {//pierwszy ruch wroga, więc najgorsze dziecko
+                    else if (tree.CurrentDepth % 2 == 1) {//pierwszy ruch wroga, więc najgorsze dziecko
                         int newRate = 2;//początkowo najwyższa ocena
-                        for (int c = 0; c < tree.Children.Count(); c++)
-                        {
-                            if (tree.Children[c].Rate < newRate)
-                            {
+                        for (int c = 0; c < tree.Children.Count(); c++) {
+                            if (tree.Children[c].Rate < newRate) {
                                 newRate = tree.Children[c].Rate;
                             }
                         }
@@ -153,8 +121,7 @@ namespace PicariaWebApp.Player
 
             }
             //jeśli nie ma dzieci, oceń BoardRatem
-            else
-            {
+            else {
                 tree.Rate = RateBoard(tree.BoardState.Positions);
             }
         }
