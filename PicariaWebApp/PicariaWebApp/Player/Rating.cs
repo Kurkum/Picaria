@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace PicariaWebApp.Player {
     public class Rating {
-        //powinno działać, gdy mniej niż 3 pionki - poza pierwszym ruchem chyba i tylko gdy już po 3 pionki!
-        public int RateBoard(List<Position> positions) {
-            if (positions.Count() == 9) {
+        private int RateBoard(List<Position> boardState)//boardstate to teraz cała klasa
+        { //powinno działać, gdy mniej niż 3 pionki - poza pierwszym ruchem chyba i tylko gdy już po 3 pionki!
+            if (boardState.Count() == 9) {
                 List<Position> computer = new List<Position>();
                 List<Position> player = new List<Position>();
 
-                for (int c = 0; c < positions.Count(); c++) {
-                    if (positions[c].Status == Status.PlayerTwo) {
-                        computer.Add(positions[c]);
+                for (int c = 0; c < boardState.Count(); c++) {
+                    if (boardState[c].Status == Status.PlayerTwo) {
+                        computer.Add(boardState[c]);
                     }
-                    if (positions[c].Status == Status.PlayerOne) {
-                        player.Add(positions[c]);
+                    if (boardState[c].Status == Status.PlayerOne) {
+                        player.Add(boardState[c]);
                     }
                 }
 
@@ -40,39 +40,30 @@ namespace PicariaWebApp.Player {
                 }
 
                 //if środek
-                if (positions[4].Status == Status.PlayerTwo) {
-                    return 1;
+                if (computer.Count > 0) {
+                    if (boardState[4].Status == Status.PlayerTwo) return 1;
                 }
-
             }
-            return -1;//absolutnie każdy inny przypadek, w założeniu: brak środka
+            return -1;//absolutnie każdy inny przypadek, brak środka
         }
 
-
-
-        public void AlfaBeta(GameTree tree) {
-
-            /*dla każdego zrób:
-                jeśli wygrana, oceń na 2 i wyczyść "dzieci"
-                jeśli ma dzieci, wykonaj dla każdego, potem dobierz swoją ocenę
-                jeśli nie ma, oceń boardRatem*/
-
-            int howMany = tree.Children.Count();
-            if (howMany > 0) {
-
-                //jeśli jest zwycięzcą, nadaj ocenę i wyczyść dzieci
-                if (tree.CurrentDepth%2==1 && RateBoard(tree.BoardState.Positions) == 2) {//ten kod i tak musiałby być wykonany w znacznej większości
-                    tree.Rate = 2;
-                    tree.Children.Clear();//ODCIĘCIE
-                }
-
-                //jeśli ma dzieci, wykonaj dla każdego, potem dobierz swoją ocenę (wtedy już dzieci miały oceny)
-                else {
-                    for (int c = 0; c < howMany; c++) {
-                        AlfaBeta(tree.Children[c]);
+        private void RateLast(GameTree tree, int whichFloorRated/*4*/) {
+            if (whichFloorRated == tree.CurrentDepth) {
+                tree.Rate = RateBoard(tree.BoardState.Positions);
+            }
+            else {
+                int HowMany = tree.Children.Count();
+                if (HowMany > 0) {
+                    for (int c = 0; c < HowMany; c++) {
+                        RateLast(tree.Children[c], whichFloorRated);
                     }
+                }
+            }
+        }
 
-                    //dobierz swoją ocenę
+        private void RatePass(GameTree tree) {//przesunięcie ocen w górę, tylko korzeń podajesz, oceni tylko 1 piętro wzwyż
+            if (tree.Children.Count() > 0) {
+                if (tree.Children[0].Rate != 0) {//dzieci już ocenione, więc oceniamy rodzica
                     if (tree.CurrentDepth % 2 == 0) {//pierwszy ruch mój, więc wybieram najlepsze dziecko
                         int newRate = -2;//początkowo najniższa ocena
                         for (int c = 0; c < tree.Children.Count(); c++) {
@@ -91,13 +82,68 @@ namespace PicariaWebApp.Player {
                         }
                         tree.Rate = newRate;
                     }
+                    //inaczej pozostawi rate=0 - ruch niestwierdzony
                 }
-
+                else {//dzieci nieocenione
+                    //
+                    //
+                    //
+                    //przekaż tą funkcję każdemu dziecku
+                    //
+                    //
+                    //
+                }
             }
-            //jeśli nie ma dzieci, oceń BoardRatem
+
+        }
+
+        //
+        //
+        //
+        //RatePassAll//ustawi wszystkie piętra a nie jedno
+        //
+        //
+        //
+
+        private void RateSecond(GameTree tree, int whichFloorRated/*2*/) {//użyj PO RateLast i po podliczeniu ocen poszczególnych elementów
+            if (whichFloorRated == tree.CurrentDepth) {
+                List<Position> BoardState = tree.BoardState.Positions;
+
+                if (BoardState.Count() == 9) {
+                    List<Position> computer = new List<Position>();
+
+                    for (int c = 0; c < BoardState.Count(); c++) {
+                        if (BoardState[c].Status == Status.PlayerTwo) computer.Add(BoardState[c]);
+                    }
+
+                    //if wygrana
+                    if (computer.Count() == 3) {
+                        if (computer[0].X - computer[1].X == computer[1].X - computer[2].X &&
+                                   computer[0].Y - computer[1].Y == computer[1].Y - computer[2].Y) {
+                            tree.Rate = 2;
+                        }
+                    }
+                }
+            }
             else {
-                tree.Rate = RateBoard(tree.BoardState.Positions);
+                int HowMany = tree.Children.Count();
+                if (HowMany > 0) {
+                    for (int c = 0; c < HowMany; c++) {
+                        RateLast(tree.Children[c], whichFloorRated);
+                    }
+                }
             }
         }
+
+        public void RateAll(GameTree tree) {//oceń piętro 2 i 4, koniecznie osobne algorytmy
+            RateLast(tree, tree.MaximumDepth);
+
+            //TO DO
+            //RatePassAll    dla przeniesienia ocen wzwyż drzewa
+            //pod tą funkcją: funkcja zwracająca najlepszy ruch - jako List<Position> Positions
+
+            RateSecond(tree, 2);//dla drugiego piętra
+        }
+
     }
 }
