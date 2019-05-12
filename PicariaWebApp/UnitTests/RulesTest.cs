@@ -13,8 +13,8 @@ namespace UnitTests
         [Fact]
         public void TestGetPossibleMovesOfPlayer()
         {
-            Board board = new Board();
-            var got = board.Rules.GetPossibleMovesOfPlayer(board, Status.PlayerTwo);
+            Board board = Board.GetBasicBoard();
+            var got = board.Rules.GetPossibleMovesOfPlayer(board, Status.PlayerOne);
             var expected = new List<Move> {new Move(new Position(0,0), Status.PlayerOne),
                 new Move(new Position(1,0), Status.PlayerOne),
                 new Move(new Position(2,0), Status.PlayerOne),
