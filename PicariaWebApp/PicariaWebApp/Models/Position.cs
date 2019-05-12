@@ -70,9 +70,9 @@ namespace PicariaWebApp.Models
             return X == position.X && Y == position.Y;
         }
 
-        public int ComparetTo(Position that)
+        public int CompareTo(Position that)
         {
-            return (3 * X + Y).CompareTo(3 * that.X + that.Y);
+            return (3 * Y + X).CompareTo(3 * that.Y + that.X);
         }
     }
 
