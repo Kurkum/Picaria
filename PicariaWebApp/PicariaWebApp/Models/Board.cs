@@ -29,9 +29,29 @@ namespace PicariaWebApp.Models
             };
         }
 
-        public Board()
+        static public Board GetBasicBoard()
         {
-            Positions = new List<Position>();
+            Board board = new Board();
+            board.Positions = new List<Position>()
+            {
+                new Position(0,0),
+                new Position(1,0),
+                new Position(2,0),
+
+                new Position(0,1),
+                new Position(1,1),
+                new Position(2,1),
+
+                new Position(0,2),
+                new Position(1,2),
+                new Position(2,2)
+            };
+            return board;
+        }
+
+        public Board()
+        {          
+            Rules = new StandardRules();
         }
 
         public Board(List<Position> positions)
@@ -46,23 +66,45 @@ namespace PicariaWebApp.Models
 
         public void ExecuteMove(Move move)
         {
-            move.NewPosition.Status = move.OldPosition.Status;
-            move.OldPosition.Status = Status.FreeToCapture;
+            if (move.OldPosition.HasSameCoordinates(move.NewPosition))
+            {
+                move.NewPosition = move.OldPosition;
+            }
+            else
+            {
+                move.NewPosition.Status = move.OldPosition.Status;
+                move.OldPosition.Status = Status.FreeToCapture;
+            }
         }
+
         public Board GetCopyOfBoardWithMoveExecuted(Move move)
-        {
+        {            
             Board board = new Board();
-            Position oldPosiotion = move.OldPosition.Clone();
+            if (move.OldPosition.HasSameCoordinates(move.NewPosition))
+            {
+                foreach(Position position in Positions)
+                {
+                    if (position.HasSameCoordinates(move.OldPosition))
+                    {
+                        board.Positions.Add(move.OldPosition.Clone());
+                    }
+                    else
+                    {
+                        board.Positions.Add(position.Clone());
+                    }
+                }
+            }
+            Position oldPosition = move.OldPosition.Clone();
             Position newPosition = move.NewPosition.Clone();
-            newPosition.Status = oldPosiotion.Status;
-            oldPosiotion.Status = Status.FreeToCapture;
+            newPosition.Status = oldPosition.Status;
+            oldPosition.Status = Status.FreeToCapture;
             foreach(Position position in Positions)
             {
-                if (position.Equals(oldPosiotion))
+                if (position.HasSameCoordinates(oldPosition))
                 {
-                    board.Positions.Add(oldPosiotion);
+                    board.Positions.Add(oldPosition);
                 }
-                else if (position.Equals(newPosition))
+                else if (position.HasSameCoordinates(newPosition))
                 {
                     board.Positions.Add(newPosition);
                 }
@@ -71,6 +113,35 @@ namespace PicariaWebApp.Models
                 }
             }
             return board;
+        }
+
+        public int CountCapturedPositions()
+        {
+            int result = 0;
+            foreach(Position position in Positions)
+            {
+                if (position.Status != Status.FreeToCapture)
+                {
+                    ++result;
+                }
+            }
+            return result;
+        }
+
+        public override bool Equals(object obj)
+        {
+            Board that = obj as Board;
+            if(this.Positions.Count != that.Positions.Count)
+            {
+                return false;
+            }
+            for(int i = 0; i < this.Positions.Count; ++i)
+            {
+                if (!this.Positions[i].Equals(that.Positions[i])){
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

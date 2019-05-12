@@ -8,6 +8,13 @@ namespace PicariaWebApp.Game
 {
     public class StandardRules : IRules
     {
+        public bool SecondPhaseBegun;
+
+        public StandardRules()
+        {
+            SecondPhaseBegun = false;
+        }
+
         public List<Position> GetPossibleMovesOfPawn(Board board, Position pawnPostion)
         {
             List<Position> ret = new List<Position>();
@@ -23,6 +30,39 @@ namespace PicariaWebApp.Game
         }
 
         public List<Move> GetPossibleMovesOfPlayer(Board board, Status player)
+        {
+            if (this.SecondPhaseBegun)
+            {
+                return SecondPhaseGetPossibleMoves(board, player);
+            }
+            else
+            {
+                if (board.CountCapturedPositions()==6)
+                {
+                    this.SecondPhaseBegun = true;
+                    return SecondPhaseGetPossibleMoves(board, player);
+                }
+                else
+                {
+                    return FirstPhaseGetPossibleMoves(board, player);
+                }
+            }
+        }
+
+        public List<Move> FirstPhaseGetPossibleMoves(Board board, Status player)
+        {
+            List<Move> ret = new List<Move>();
+            foreach (Position e in board.Positions)
+            {
+                if(e.Status == Status.FreeToCapture)
+                {
+                    ret.Add(new Move(e, player));
+                }
+            }
+            return ret;
+        }
+
+        public List<Move> SecondPhaseGetPossibleMoves(Board board, Status player)
         {
             List<Move> ret = new List<Move>();
             foreach (Position e in board.Positions)
