@@ -50,7 +50,8 @@ namespace PicariaWebApp.Models
         }
 
         public Board()
-        {          
+        {
+            Positions = new List<Position>();
             Rules = new StandardRules();
         }
 
@@ -68,7 +69,7 @@ namespace PicariaWebApp.Models
         {
             if (move.OldPosition.HasSameCoordinates(move.NewPosition))
             {
-                move.NewPosition = move.OldPosition;
+                move.NewPosition.Status = move.OldPosition.Status;
             }
             else
             {
@@ -93,6 +94,7 @@ namespace PicariaWebApp.Models
                         board.Positions.Add(position.Clone());
                     }
                 }
+                return board;
             }
             Position oldPosition = move.OldPosition.Clone();
             Position newPosition = move.NewPosition.Clone();
