@@ -104,7 +104,17 @@ namespace PicariaWebApp.Models
         public override bool Equals(object obj)
         {
             Board that = obj as Board;
-            return this.Positions.Count() == that.Positions.Count() && !this.Positions.Except(that.Positions).Any();
+            if(this.Positions.Count != that.Positions.Count)
+            {
+                return false;
+            }
+            for(int i = 0; i < this.Positions.Count; ++i)
+            {
+                if (!this.Positions[i].Equals(that.Positions[i])){
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

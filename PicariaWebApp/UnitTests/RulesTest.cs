@@ -26,7 +26,7 @@ namespace UnitTests
                 new Move(new Position(0,2)),
                 new Move(new Position(1,2)),
                 new Move(new Position(2,2)) };
-            Assert.True((got.Count() == expected.Count()) && !got.Except(expected).Any());
+            Assert.True(Move.AreListsOfMovesEqual(got, expected));
         }
     }
 }
