@@ -10,8 +10,9 @@ namespace PicariaWebApp.Player
     public class Rating
     {
         //powinno działać, gdy mniej niż 3 pionki - poza pierwszym ruchem chyba i tylko gdy już po 3 pionki!
-        public int RateBoard(List<Position> positions)
+        public int RateBoard(Board board)
         {
+            List<Position> positions = board.Positions;
             if (positions.Count() == 9)
             {
                 List<Position> computer = new List<Position>();
@@ -32,7 +33,7 @@ namespace PicariaWebApp.Player
                 //if przegrana - kolejność tych ifów z returnami bardzo ważna - mówi o hierarchii
                 //podwójny if - żeby nie próbował odpalić tego drugiego warunku?
                 if (player.Count() == 3)
-                {
+                {//one zawsze będą wystarczająco po kolei
                     if (player[0].X - player[1].X == player[1].X - player[2].X &&
                                    player[0].Y - player[1].Y == player[1].Y - player[2].Y)
                     {//warunek linii
@@ -92,7 +93,7 @@ namespace PicariaWebApp.Player
                 return anotherResult;
 
             }
-            return -90;//błąd -> podana tablica jest za mała
+            return -90;//błąd -> podana tablica jest za mała, najlepiej jej nie używać, najniższa ocena i najlepiej wyrzuć gdzieś exception
         }
 
 
@@ -110,9 +111,9 @@ namespace PicariaWebApp.Player
             {
 
                 //jeśli jest zwycięzcą, nadaj ocenę i wyczyść dzieci
-                if (tree.CurrentDepth % 2 == 1 && RateBoard(tree.BoardState.Positions) == 2)
+                if (tree.CurrentDepth % 2 == 1 && RateBoard(tree.BoardState) == 50)
                 {//ten kod i tak musiałby być wykonany w znacznej większości
-                    tree.Rate = 2;
+                    tree.Rate = 50;
                     tree.Children.Clear();//ODCIĘCIE
                 }
 
@@ -127,7 +128,7 @@ namespace PicariaWebApp.Player
                     //dobierz swoją ocenę
                     if (tree.CurrentDepth % 2 == 0)
                     {//pierwszy ruch mój, więc wybieram najlepsze dziecko
-                        int newRate = -2;//początkowo najniższa ocena
+                        int newRate = -50;//początkowo najniższa ocena
                         for (int c = 0; c < tree.Children.Count(); c++)
                         {
                             if (tree.Children[c].Rate > newRate)
@@ -139,7 +140,7 @@ namespace PicariaWebApp.Player
                     }
                     else if (tree.CurrentDepth % 2 == 1)
                     {//pierwszy ruch wroga, więc najgorsze dziecko
-                        int newRate = 2;//początkowo najwyższa ocena
+                        int newRate = 50;//początkowo najwyższa ocena
                         for (int c = 0; c < tree.Children.Count(); c++)
                         {
                             if (tree.Children[c].Rate < newRate)
@@ -155,7 +156,7 @@ namespace PicariaWebApp.Player
             //jeśli nie ma dzieci, oceń BoardRatem
             else
             {
-                tree.Rate = RateBoard(tree.BoardState.Positions);
+                tree.Rate = RateBoard(tree.BoardState);
             }
         }
     }
