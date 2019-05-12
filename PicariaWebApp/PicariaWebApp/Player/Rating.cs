@@ -11,7 +11,8 @@ namespace PicariaWebApp.Player
     {
         //powinno działać, gdy mniej niż 3 pionki - poza pierwszym ruchem chyba i tylko gdy już po 3 pionki!
         public int RateBoard(Board board)
-        {
+        {  // lepszą techniką będzie tylko liczyć liczbę pól, na które mamy dostęp - bo często te "możliwości ruchu" poszczególnych pionków się pokrywają i niwelują swoją teoretyczną przewagę
+            //TEN PROBLEM ZAŁATWI ALFABETA: słaby punkt: patrz droga twoich testów, taki trochę niesprawiedliwy kill komputera
             List<Position> positions = board.Positions;
             if (positions.Count() == 9)
             {
