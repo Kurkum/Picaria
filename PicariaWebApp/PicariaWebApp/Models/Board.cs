@@ -29,9 +29,10 @@ namespace PicariaWebApp.Models
             };
         }
 
-        public Board()
+        static public Board GetBasicBoard()
         {
-            Positions = new List<Position>()
+            Board board = new Board();
+            board.Positions = new List<Position>()
             {
                 new Position(0,0),
                 new Position(1,0),
@@ -45,6 +46,11 @@ namespace PicariaWebApp.Models
                 new Position(1,2),
                 new Position(2,2)
             };
+            return board;
+        }
+
+        public Board()
+        {          
             Rules = new StandardRules();
         }
 
@@ -60,24 +66,45 @@ namespace PicariaWebApp.Models
 
         public void ExecuteMove(Move move)
         {
-            move.NewPosition.Status = move.OldPosition.Status;
-            move.OldPosition.Status = Status.FreeToCapture;
+            if (move.OldPosition.HasSameCoordinates(move.NewPosition))
+            {
+                move.NewPosition = move.OldPosition;
+            }
+            else
+            {
+                move.NewPosition.Status = move.OldPosition.Status;
+                move.OldPosition.Status = Status.FreeToCapture;
+            }
         }
 
         public Board GetCopyOfBoardWithMoveExecuted(Move move)
-        {
+        {            
             Board board = new Board();
-            Position oldPosiotion = move.OldPosition.Clone();
+            if (move.OldPosition.HasSameCoordinates(move.NewPosition))
+            {
+                foreach(Position position in Positions)
+                {
+                    if (position.HasSameCoordinates(move.OldPosition))
+                    {
+                        board.Positions.Add(move.OldPosition.Clone());
+                    }
+                    else
+                    {
+                        board.Positions.Add(position.Clone());
+                    }
+                }
+            }
+            Position oldPosition = move.OldPosition.Clone();
             Position newPosition = move.NewPosition.Clone();
-            newPosition.Status = oldPosiotion.Status;
-            oldPosiotion.Status = Status.FreeToCapture;
+            newPosition.Status = oldPosition.Status;
+            oldPosition.Status = Status.FreeToCapture;
             foreach(Position position in Positions)
             {
-                if (position.Equals(oldPosiotion))
+                if (position.HasSameCoordinates(oldPosition))
                 {
-                    board.Positions.Add(oldPosiotion);
+                    board.Positions.Add(oldPosition);
                 }
-                else if (position.Equals(newPosition))
+                else if (position.HasSameCoordinates(newPosition))
                 {
                     board.Positions.Add(newPosition);
                 }

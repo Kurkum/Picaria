@@ -65,7 +65,7 @@ namespace PicariaWebApp.Models
             return base.Equals(obj);
         }
 
-        public bool HaveSameCoordinates(Position position)
+        public bool HasSameCoordinates(Position position)
         {
             return X == position.X && Y == position.Y;
         }

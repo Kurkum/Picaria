@@ -25,19 +25,19 @@ namespace UnitTests
         }
 
         [Fact]
-        public void HaveSameCoordinatesTest()
+        public void HasSameCoordinatesTest()
         {
             Position pos1 = new Position(5, 5, Status.FreeToCapture);
             Position pos2 = new Position(5, 5, Status.PlayerOne);
-            Assert.True(pos1.HaveSameCoordinates(pos2));
+            Assert.True(pos1.HasSameCoordinates(pos2));
         }
 
         [Fact]
-        public void NotHaveSameCoordinatesTest()
+        public void NotHasSameCoordinatesTest()
         {
             Position pos1 = new Position(4, 5, Status.FreeToCapture);
             Position pos2 = new Position(5, 5, Status.PlayerOne);
-            Assert.False(pos1.HaveSameCoordinates(pos2));
+            Assert.False(pos1.HasSameCoordinates(pos2));
         }
     }
 }

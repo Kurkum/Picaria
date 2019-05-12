@@ -33,36 +33,36 @@ namespace PicariaWebApp.Game
         {
             if (this.SecondPhaseBegun)
             {
-                return _secondPhaseGetPossibleMoves(board, player);
+                return SecondPhaseGetPossibleMoves(board, player);
             }
             else
             {
                 if (board.CountCapturedPositions()==6)
                 {
                     this.SecondPhaseBegun = true;
-                    return _secondPhaseGetPossibleMoves(board, player);
+                    return SecondPhaseGetPossibleMoves(board, player);
                 }
                 else
                 {
-                    return _firstPhaseGetPossibleMoves(board);
+                    return FirstPhaseGetPossibleMoves(board, player);
                 }
             }
         }
 
-        private List<Move> _firstPhaseGetPossibleMoves(Board board)
+        public List<Move> FirstPhaseGetPossibleMoves(Board board, Status player)
         {
             List<Move> ret = new List<Move>();
             foreach (Position e in board.Positions)
             {
                 if(e.Status == Status.FreeToCapture)
                 {
-                    ret.Add(new Move(e));
+                    ret.Add(new Move(e, player));
                 }
             }
             return ret;
         }
 
-        private List<Move> _secondPhaseGetPossibleMoves(Board board, Status player)
+        public List<Move> SecondPhaseGetPossibleMoves(Board board, Status player)
         {
             List<Move> ret = new List<Move>();
             foreach (Position e in board.Positions)

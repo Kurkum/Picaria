@@ -17,9 +17,10 @@ namespace PicariaWebApp.Game
             this.NewPosition = newPosition;
         }
 
-        public Move(Position position)
+        public Move(Position position, Status status)
         {
-            OldPosition = NewPosition = position;
+            OldPosition = new Position(position.X, position.Y, status);
+            NewPosition = position;
         }
 
         public override bool Equals(object obj)
