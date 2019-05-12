@@ -19,9 +19,45 @@ namespace UnitTests
         [Fact]
         public void MoveTest()
         {
-            Board board = new Board();
-            board.Positions.ElementAt(5).Status = Status.PlayerTwo;
-            Move move = new Move(board.Positions.ElementAt(5), board.Positions.ElementAt(0));
+            Board board = Board.GetBasicBoard();
+            board.Positions.ElementAt(4).Status = Status.PlayerTwo;
+            Move move = new Move(board.Positions.ElementAt(4), board.Positions.ElementAt(0));
+            board.ExecuteMove(move);
+            Board expected = Board.GetBasicBoard();
+            expected.Positions.ElementAt(0).Status = Status.PlayerTwo;
+            Assert.Equal(board, expected);
+        }
+
+        [Fact]
+        public void DropMoveTest()
+        {
+            Board board = Board.GetBasicBoard();
+            Move move = new Move(board.Positions.ElementAt(4), Status.PlayerTwo);
+            board.ExecuteMove(move);
+            Board expected = Board.GetBasicBoard();
+            expected.Positions.ElementAt(4).Status = Status.PlayerTwo;
+            Assert.Equal(board, expected);
+        }
+
+        [Fact]
+        public void MoveInCopyTest()
+        {
+            Board board = Board.GetBasicBoard();
+            board.Positions.ElementAt(4).Status = Status.PlayerTwo;
+            Move move = new Move(board.Positions.ElementAt(4), board.Positions.ElementAt(0));
+            Board expected = Board.GetBasicBoard();
+            expected.Positions.ElementAt(0).Status = Status.PlayerTwo;
+            Assert.Equal(board.GetCopyOfBoardWithMoveExecuted(move), expected);
+        }
+
+        [Fact]
+        public void DropInCopyTest()
+        {
+            Board board = Board.GetBasicBoard();
+            Move move = new Move(board.Positions.ElementAt(4), Status.PlayerTwo);
+            Board expected = Board.GetBasicBoard();
+            expected.Positions.ElementAt(4).Status = Status.PlayerTwo;
+            Assert.Equal(board.GetCopyOfBoardWithMoveExecuted(move), expected);
         }
     }
 }
