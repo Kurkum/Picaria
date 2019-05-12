@@ -10,8 +10,8 @@ namespace RatingTests
         [TestMethod]
         public void TestRate()
         {
-            List<Position> positions = new List<Positions> { }
-            positions.Add(new Position)
+            List<Position> positions = new List<Positions> { };
+            //positions.Add(new Position)
             int i = PicariaWebApp.Player.Rating.RateBoard();
             bool value = true;
             Assert.IsTrue(value);

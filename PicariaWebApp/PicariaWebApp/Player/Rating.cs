@@ -71,7 +71,7 @@ namespace PicariaWebApp.Player {
                 return anotherResult;
 
             }
-            return -90;//błąd -> podana tablica jest za mała
+            return -90;//error -> podana tablica jest za mała
         }
 
 
@@ -87,8 +87,8 @@ namespace PicariaWebApp.Player {
             if (howMany > 0) {
 
                 //jeśli jest zwycięzcą, nadaj ocenę i wyczyść dzieci
-                if (tree.CurrentDepth%2==1 && RateBoard(tree.BoardState.Positions) == 2) {//ten kod i tak musiałby być wykonany w znacznej większości
-                    tree.Rate = 2;
+                if (tree.CurrentDepth%2==1 && RateBoard(tree.BoardState.Positions) == 50) {//ten kod i tak musiałby być wykonany w znacznej większości
+                    tree.Rate = 50;
                     tree.Children.Clear();//ODCIĘCIE
                 }
 
@@ -100,7 +100,7 @@ namespace PicariaWebApp.Player {
 
                     //dobierz swoją ocenę
                     if (tree.CurrentDepth % 2 == 0) {//pierwszy ruch mój, więc wybieram najlepsze dziecko
-                        int newRate = -2;//początkowo najniższa ocena
+                        int newRate = -50;//początkowo najniższa ocena
                         for (int c = 0; c < tree.Children.Count(); c++) {
                             if (tree.Children[c].Rate > newRate) {
                                 newRate = tree.Children[c].Rate;
@@ -109,7 +109,7 @@ namespace PicariaWebApp.Player {
                         tree.Rate = newRate;
                     }
                     else if (tree.CurrentDepth % 2 == 1) {//pierwszy ruch wroga, więc najgorsze dziecko
-                        int newRate = 2;//początkowo najwyższa ocena
+                        int newRate = 50;//początkowo najwyższa ocena
                         for (int c = 0; c < tree.Children.Count(); c++) {
                             if (tree.Children[c].Rate < newRate) {
                                 newRate = tree.Children[c].Rate;
