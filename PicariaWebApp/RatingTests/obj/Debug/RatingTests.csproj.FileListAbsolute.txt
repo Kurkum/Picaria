@@ -1,0 +1,14 @@
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\bin\Debug\RatingTests.dll
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\bin\Debug\RatingTests.pdb
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\obj\Debug\RatingTests.csprojAssemblyReference.cache
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\obj\Debug\RatingTests.csproj.CoreCompileInputs.cache
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\obj\Debug\RatingTests.csproj.CopyComplete
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\obj\Debug\RatingTests.dll
+C:\Users\Bartosz\Desktop\SI\picariaprojekt\PicariaWebApp\RatingTests\obj\Debug\RatingTests.pdb
