@@ -25,7 +25,7 @@ namespace UnitTests
             board.ExecuteMove(move);
             Board expected = Board.GetBasicBoard();
             expected.Positions.ElementAt(0).Status = Status.PlayerTwo;
-            Assert.Equal(board, expected);
+            Assert.Equal(expected, board);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace UnitTests
             board.ExecuteMove(move);
             Board expected = Board.GetBasicBoard();
             expected.Positions.ElementAt(4).Status = Status.PlayerTwo;
-            Assert.Equal(board, expected);
+            Assert.Equal(expected, board);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace UnitTests
             Move move = new Move(board.Positions.ElementAt(4), board.Positions.ElementAt(0));
             Board expected = Board.GetBasicBoard();
             expected.Positions.ElementAt(0).Status = Status.PlayerTwo;
-            Assert.Equal(board.GetCopyOfBoardWithMoveExecuted(move), expected);
+            Assert.Equal(expected, board.GetCopyOfBoardWithMoveExecuted(move));
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace UnitTests
             Move move = new Move(board.Positions.ElementAt(4), Status.PlayerTwo);
             Board expected = Board.GetBasicBoard();
             expected.Positions.ElementAt(4).Status = Status.PlayerTwo;
-            Assert.Equal(board.GetCopyOfBoardWithMoveExecuted(move), expected);
+            Assert.Equal(expected, board.GetCopyOfBoardWithMoveExecuted(move));
         }
     }
 }

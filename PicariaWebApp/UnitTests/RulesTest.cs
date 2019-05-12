@@ -26,7 +26,7 @@ namespace UnitTests
                 new Move(new Position(0,2), Status.PlayerOne),
                 new Move(new Position(1,2), Status.PlayerOne),
                 new Move(new Position(2,2), Status.PlayerOne) };
-            Assert.True(Move.AreListsOfMovesEqual(got, expected));
+            Assert.True(Move.AreListsOfMovesEqual(expected, got));
         }
 
         [Fact]
