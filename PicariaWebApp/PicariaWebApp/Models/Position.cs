@@ -22,7 +22,22 @@ namespace PicariaWebApp.Models
 
         public bool HaveSameCoordinates(Position position)
         {
+<<<<<<< HEAD
             return (X == position.X && Y == position.Y);
+=======
+            if(obj is Position)
+            {
+                var castedObj = obj as Position;
+                return (X == castedObj.X && Y == castedObj.Y && Status == castedObj.Status);
+            }
+
+            return base.Equals(obj);
+>>>>>>> Rules
+        }
+
+        public bool HaveSameCoordinates(Position position)
+        {
+            return X == position.X && Y == position.Y;
         }
     }
 
