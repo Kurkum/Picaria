@@ -56,13 +56,23 @@ namespace PicariaWebApp.Models
 
         public override bool Equals(object obj)
         {
-            if(obj is Position)
+            if (obj is Position)
             {
                 var castedObj = obj as Position;
-                return (X == castedObj.X && Y == castedObj.Y);
+                return (X == castedObj.X && Y == castedObj.Y && Status == castedObj.Status);
             }
 
             return base.Equals(obj);
+        }
+
+        public bool HasSameCoordinates(Position position)
+        {
+            return X == position.X && Y == position.Y;
+        }
+
+        public int CompareTo(Position that)
+        {
+            return (3 * Y + X).CompareTo(3 * that.Y + that.X);
         }
     }
 
