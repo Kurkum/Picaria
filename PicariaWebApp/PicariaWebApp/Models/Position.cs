@@ -74,6 +74,11 @@ namespace PicariaWebApp.Models
         {
             return (3 * Y + X).CompareTo(3 * that.Y + that.X);
         }
+
+        public override string ToString()
+        {
+            return "("+ X.ToString() + ", " + Y.ToString() + ", " + Status + ")";
+        }
     }
 
     public enum Status

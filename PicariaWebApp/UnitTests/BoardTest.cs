@@ -11,13 +11,13 @@ namespace UnitTests
     public class BoardTest
     {
         [Fact]
-        public void EmptyBoardEualsTest()
+        public void TestEmptyBoardEuals()
         {
             Assert.Equal(Board.GetBasicBoard(), Board.GetBasicBoard());
         }
 
         [Fact]
-        public void MoveTest()
+        public void TestMove()
         {
             Board board = Board.GetBasicBoard();
             board.Positions.ElementAt(4).Status = Status.PlayerTwo;
@@ -29,7 +29,7 @@ namespace UnitTests
         }
 
         [Fact]
-        public void DropMoveTest()
+        public void TestDropMove()
         {
             Board board = Board.GetBasicBoard();
             Move move = new Move(board.Positions.ElementAt(4), Status.PlayerTwo);
@@ -40,7 +40,7 @@ namespace UnitTests
         }
 
         [Fact]
-        public void MoveInCopyTest()
+        public void TestMoveInCopy()
         {
             Board board = Board.GetBasicBoard();
             board.Positions.ElementAt(4).Status = Status.PlayerTwo;
@@ -51,7 +51,7 @@ namespace UnitTests
         }
 
         [Fact]
-        public void DropInCopyTest()
+        public void TestDropInCopy()
         {
             Board board = Board.GetBasicBoard();
             Move move = new Move(board.Positions.ElementAt(4), Status.PlayerTwo);

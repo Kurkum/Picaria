@@ -145,5 +145,27 @@ namespace PicariaWebApp.Models
             }
             return true;
         }
+
+        public Board Clone()
+        {
+            Board other = (Board) this.MemberwiseClone();
+            other.Positions = new List<Position>();
+            foreach(Position position in Positions)
+            {
+                other.Positions.Add(position.Clone());
+            }
+            return other;
+        }
+
+        public override string ToString()
+        {
+            string result = "{";
+            foreach(Position position in Positions)
+            {
+                result += position.ToString();
+            }
+            result += ")";
+            return result;
+        }
     }
 }
