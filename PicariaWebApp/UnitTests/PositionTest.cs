@@ -9,7 +9,7 @@ namespace UnitTests
     public class PositionTest
     {
         [Fact]
-        public void EqualsTest()
+        public void TestEquals()
         {
             Position pos1 = new Position(5, 5, Status.FreeToCapture);
             Position pos2 = new Position(5, 5, Status.FreeToCapture);
@@ -17,7 +17,7 @@ namespace UnitTests
         }
 
         [Fact]
-        public void NotEqualsTest()
+        public void TestNotEquals()
         {
             Position pos1 = new Position(5, 5, Status.FreeToCapture);
             Position pos2 = new Position(5, 5, Status.PlayerOne);
@@ -25,7 +25,7 @@ namespace UnitTests
         }
 
         [Fact]
-        public void HasSameCoordinatesTest()
+        public void TestHasSameCoordinates()
         {
             Position pos1 = new Position(5, 5, Status.FreeToCapture);
             Position pos2 = new Position(5, 5, Status.PlayerOne);
@@ -33,7 +33,7 @@ namespace UnitTests
         }
 
         [Fact]
-        public void NotHasSameCoordinatesTest()
+        public void TestNotHasSameCoordinates()
         {
             Position pos1 = new Position(4, 5, Status.FreeToCapture);
             Position pos2 = new Position(5, 5, Status.PlayerOne);

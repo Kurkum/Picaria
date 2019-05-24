@@ -58,5 +58,45 @@ namespace PicariaWebApp.Player
                 }
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            GameTree that = obj as GameTree;
+            if (!this.BoardState.Equals(that.BoardState))
+            {
+                return false;
+            }
+            else if (that.CurrentDepth == that.MaximumDepth)
+            {
+                return true;
+            }
+            else
+            {
+                if (this.Children.Count != that.Children.Count)
+                {
+                    return false;
+                }
+                for (int i = 0; i < this.Children.Count; ++i)
+                {
+                    if (!this.Children.ElementAt(i).Equals(that.Children.ElementAt(i)))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        public override string ToString()
+        {
+            string result = this.BoardState.ToString()+";";
+            if (this.Children != null)
+            {
+                foreach (GameTree gameTree in this.Children)
+                {
+                    result += gameTree.ToString();
+                }
+            }
+            return result;
+        }
     }
 }
