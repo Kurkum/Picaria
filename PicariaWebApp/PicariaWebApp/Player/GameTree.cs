@@ -26,6 +26,16 @@ namespace PicariaWebApp.Player
             this.Rate = 0;
         }
 
+        public void ChooseNewRoot(GameTree newRoot)
+        {
+            Rate = newRoot.Rate;
+            BoardState = newRoot.BoardState;
+            NextPlayer = newRoot.NextPlayer;
+            Children = newRoot.Children;
+            _setChildrenCurrentDepth();
+        }
+
+
         public void Expand()
         {
             if (CurrentDepth == MaximumDepth)
@@ -97,6 +107,22 @@ namespace PicariaWebApp.Player
                 }
             }
             return result;
+        }
+
+        private void _setChildrenCurrentDepth()
+        {
+            if (Children == null)
+            {
+                return;
+            }
+            else
+            {
+                foreach (var e in Children)
+                {
+                    e.CurrentDepth = (CurrentDepth + 1);
+                    _setChildrenCurrentDepth();
+                }
+            }
         }
     }
 }
