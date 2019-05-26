@@ -146,6 +146,11 @@ namespace PicariaWebApp.Models
             return true;
         }
 
+        public Position PositionAt(int x, int y)
+        {
+            return Positions.ElementAt(y*3+x);
+        }
+
         public Board Clone()
         {
             Board other = (Board) this.MemberwiseClone();
