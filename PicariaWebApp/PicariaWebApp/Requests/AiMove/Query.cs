@@ -33,7 +33,7 @@ namespace PicariaWebApp.Requests.AiMove
             Console.WriteLine(board);
             foreach (Position position in board.Positions)
             {
-                position.TranslatePosition();
+                position.TranslateToInnerSystem();
             }
             Console.WriteLine(board);
             request.Board = board.Positions;

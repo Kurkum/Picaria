@@ -59,7 +59,7 @@ namespace PicariaWebApp.Models
         {
             foreach (var position in positions)
             {
-                position.TranslatePosition();
+                position.TranslateFromInnerSystem();
             }
 
             Positions = positions;
