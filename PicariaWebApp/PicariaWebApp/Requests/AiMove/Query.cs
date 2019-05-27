@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using PicariaWebApp.Models;
+using PicariaWebApp.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace PicariaWebApp.Requests.AiMove
     {
         public async Task<List<Position>> Handle(Query request, CancellationToken cancellationToken)
         {
-            if(request.Board.Count(x=>x.Status == Status.PlayerTwo) == 3)
+            /*if(request.Board.Count(x=>x.Status == Status.PlayerTwo) == 3)
             {
                 MovingPawns(request.Board);
             }
@@ -24,6 +25,18 @@ namespace PicariaWebApp.Requests.AiMove
             {
                 SettingUpPawns(request.Board);
             }
+
+            return request.Board;*/
+            SimpleArtificialIntelligence intelligence = new SimpleArtificialIntelligence(Status.PlayerTwo);
+            Board gotBoard = new Board(request.Board);
+            Board board = intelligence.GetBoardWithDecisonExecuted(gotBoard);
+            Console.WriteLine(board);
+            foreach (Position position in board.Positions)
+            {
+                position.TranslatePosition();
+            }
+            Console.WriteLine(board);
+            request.Board = board.Positions;
 
             return request.Board;
         }
