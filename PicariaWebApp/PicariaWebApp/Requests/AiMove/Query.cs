@@ -6,6 +6,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+
+
+
+
 namespace PicariaWebApp.Requests.AiMove
 {
     public class Query : IRequest<List<Position>>
@@ -30,14 +34,55 @@ namespace PicariaWebApp.Requests.AiMove
 
         private void SettingUpPawns(List<Position> board)
         {
-            board.FirstOrDefault(x => x.Status == Status.FreeToCapture).Status = Status.PlayerTwo;
+            Player.GameTree gameTree = new Player.GameTree(Board.GetBasicBoard(), Status.PlayerOne, 3, 0);
+            gameTree.Expand();
+            Player.Rating rating = new Player.Rating();
+            rating.AlfaBeta(gameTree);
+
+            Player.GameTree bestChildren = gameTree.Children[0];
+
+            for (int c = 0; c < gameTree.Children.Count(); c++) {
+                if (gameTree.Children[c].Rate > bestChildren.Rate) {
+                    bestChildren = gameTree.Children[c];
+                }
+            }
+            board = bestChildren.BoardState.Positions;
+
+
+
+            //board.FirstOrDefault(x => x.Status == Status.FreeToCapture).Status = Status.PlayerTwo;
         }
 
         private void MovingPawns(List<Position> board)
         {
-            var newPosition = board.FirstOrDefault(x => x.Status == Status.FreeToCapture);
-            board.FirstOrDefault(x => x.Status == Status.PlayerTwo).Status = Status.FreeToCapture;
-            newPosition.Status = Status.PlayerTwo;
+            /*
+             Utwórz drzewo Przemka od "board" podanego w argumentach tej tu funkcji
+             Oceń je
+             Zadeklaruj zmienną board i ustaw ją jako pierwszy element drugiego (od góry) piętra drzewa
+             przeszukaj to piętro drzewa i każdy fragment o wyższym wyniku wstaw do zmiennej newBoard
+             board z tej tu funkcji = uzyskany board
+             
+             */
+            
+            
+            Player.GameTree gameTree = new Player.GameTree(Board.GetBasicBoard(), Status.PlayerOne, 3, 0);
+            gameTree.Expand();
+            Player.Rating rating = new Player.Rating();
+            rating.AlfaBeta(gameTree);
+
+            Player.GameTree bestChildren = gameTree.Children[0];
+            
+            for(int c = 0; c < gameTree.Children.Count(); c++) {
+                if (gameTree.Children[c].Rate > bestChildren.Rate) {
+                    bestChildren = gameTree.Children[c];
+                }
+            }
+            board = bestChildren.BoardState.Positions;
+            
+            /*
+            var newPosition = board.FirstOrDefault(x => x.Status == Status.FreeToCapture); // bierze pierwsze pole wolne
+            board.FirstOrDefault(x => x.Status == Status.PlayerTwo).Status = Status.FreeToCapture; // pierwsze pole gracza drugiego ustawia na wolne
+            newPosition.Status = Status.PlayerTwo; // ustawia wzięte wolne pole na stan gracza drugiego*/
         }
 
     }
