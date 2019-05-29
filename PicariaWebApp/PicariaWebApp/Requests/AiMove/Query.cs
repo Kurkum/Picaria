@@ -17,16 +17,6 @@ namespace PicariaWebApp.Requests.AiMove
     {
         public async Task<List<Position>> Handle(Query request, CancellationToken cancellationToken)
         {
-            /*if(request.Board.Count(x=>x.Status == Status.PlayerTwo) == 3)
-            {
-                MovingPawns(request.Board);
-            }
-            else
-            {
-                SettingUpPawns(request.Board);
-            }
-
-            return request.Board;*/
             SimpleArtificialIntelligence intelligence = new SimpleArtificialIntelligence(Status.PlayerTwo);
             Board gotBoard = new Board(request.Board);
             Board board = intelligence.GetBoardWithDecisonExecuted(gotBoard);

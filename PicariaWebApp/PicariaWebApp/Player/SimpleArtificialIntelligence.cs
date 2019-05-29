@@ -19,7 +19,8 @@ namespace PicariaWebApp.Player
         {
             GameTree gameTree = new GameTree(state, Me, 2, 0);
             gameTree.Expand();
-            Board statusQuo = gameTree.BoardState; //it may not be true status quo, but only when I can't win
+            Board statusQuo = gameTree.Children.ElementAt(0).BoardState; //it may not be true status quo, but only when I can't win
+            Board boardOnWhichIOccupyMiddlePoint = null;
             foreach (GameTree child in gameTree.Children)
             {
                 if (IfIWin(CheckGameResult(child.BoardState)))
@@ -33,11 +34,22 @@ namespace PicariaWebApp.Player
                         goto GoFurther;
                     }
                 }
+                if (child.BoardState.PositionAt(1,1).Status==Me)
+                {
+                    boardOnWhichIOccupyMiddlePoint = child.BoardState;
+                }
                 statusQuo = child.BoardState;
             GoFurther:
                 continue;
             }
-            return statusQuo;
+            if (boardOnWhichIOccupyMiddlePoint == null)
+            {
+                return statusQuo;
+            }
+            else
+            {
+                return boardOnWhichIOccupyMiddlePoint;
+            }
 
         }
 
