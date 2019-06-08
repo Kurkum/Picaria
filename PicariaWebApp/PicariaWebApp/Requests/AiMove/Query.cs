@@ -20,16 +20,29 @@ namespace PicariaWebApp.Requests.AiMove
     {
         public async Task<List<Position>> Handle(Query request, CancellationToken cancellationToken)
         {
-            if(request.Board.Count(x=>x.Status == Status.PlayerTwo) == 3)
-            {
-                MovingPawns(request.Board);
-            }
-            else
-            {
-                SettingUpPawns(request.Board);
-            }
 
-            return request.Board;
+
+            Player.GameTree gameTree = new Player.GameTree(Board.GetBasicBoard(), Status.PlayerOne, 3, 0);
+            gameTree.Expand();
+            return gameTree.Children[0].BoardState.Positions;
+
+            Player.Rating rating = new Player.Rating();
+            rating.AlfaBeta(gameTree);
+
+            Player.GameTree bestChildren = gameTree.Children[0];
+
+            for (int c = 0; c < gameTree.Children.Count(); c++)
+            {
+                if (gameTree.Children[c].Rate > bestChildren.Rate)
+                {
+                    bestChildren = gameTree.Children[c];
+                }
+            }
+            return bestChildren.BoardState.Positions;
+
+
+
+            //return request.Board;
         }
 
         private void SettingUpPawns(List<Position> board)
