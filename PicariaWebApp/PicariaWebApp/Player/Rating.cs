@@ -116,23 +116,30 @@ namespace PicariaWebApp.Player
             {
 
                 //jeśli jest zwycięzcą, nadaj ocenę i wyczyść dzieci
-                if (tree.CurrentDepth % 2 == 1 && RateBoard(tree.BoardState) == 50)
+                if (tree.CurrentDepth % 2 == 1 && RateBoard(tree.BoardState) == 50 && tree.CurrentDepth!=0)
                 {//ten kod i tak musiałby być wykonany w znacznej większości
                     tree.Rate = 50;
                     tree.Children.Clear();//ODCIĘCIE
                 }
 
+                else if (tree.CurrentDepth % 2 == 0 && RateBoard(tree.BoardState) == -50 && tree.CurrentDepth != 0)
+                {//ten kod i tak musiałby być wykonany w znacznej większości
+                    tree.Rate = -50;
+                    tree.Children.Clear();//ODCIĘCIE
+                }
+
+
                 //jeśli ma dzieci, wykonaj dla każdego, potem dobierz swoją ocenę (wtedy już dzieci miały oceny)
                 else
                 {
-                    
+
 
 
                     for (int c = 0; c < howMany; c++)
                     {
 
                         AlfaBeta(tree.Children[c]);
-                        Console.WriteLine("\n\n\n\n\n\n\n\nn\n\n\n\n" + c + "\n\n\n\n\n\n\n\n\n\n");
+                        //Console.WriteLine("\n\n\n\n\n\n\n\nn\n\n\n\n" + c + "\n\n\n\n\n\n\n\n\n\n");
                     }
 
 

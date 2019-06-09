@@ -17,7 +17,29 @@ namespace PicariaWebApp.Requests.AiMove
     {
         public async Task<List<Position>> Handle(Query request, CancellationToken cancellationToken)
         {
-            Player.GameTree gameTree = new Player.GameTree(new Board(request.Board), Status.PlayerTwo, 3, 0);
+            /*List<Position> firstMove = request.Board;
+            for (int i = 0; i < 9; i++)
+            {
+                Console.WriteLine(request.Board[i]);
+                firstMove[i].Status = Status.FreeToCapture;
+            }
+            firstMove[4].Status = Status.PlayerOne;
+            /*
+            if (request.Board == firstMove)
+            {
+                Console.WriteLine("\n\n\n\n\n\n\n\nWESZŁO\n\n\n\n\n\n\n\n");
+                request.Board[0].Status = Status.PlayerTwo;
+                foreach (Position position in firstMove)
+                {
+                    position.TranslateToInnerSystem();
+                }
+                return request.Board;
+            }/**/
+
+
+
+
+            Player.GameTree gameTree = new Player.GameTree(new Board(request.Board), Status.PlayerTwo, 4, 0);
             gameTree.Expand();
 
             Player.Rating rating = new Player.Rating();
@@ -25,7 +47,7 @@ namespace PicariaWebApp.Requests.AiMove
 
             Player.GameTree bestChildren = gameTree.Children[0];
 
-            
+
             for (int c = 0; c < gameTree.Children.Count(); c++)
             {
                 if (gameTree.Children[c].Rate > bestChildren.Rate)
@@ -42,7 +64,7 @@ namespace PicariaWebApp.Requests.AiMove
             return bestChildren.BoardState.Positions;
 
 
-           
+
 
 
             /*
