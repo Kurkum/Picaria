@@ -24,8 +24,22 @@ namespace UnitTests
             expected.PositionAt(2, 0).Status = Status.PlayerOne;
 
             SimpleArtificialIntelligence intelligence = new SimpleArtificialIntelligence(Status.PlayerOne);
-            //Assert.Equal(expected, intelligence.GetBoardWithDecisonExecuted(board));
 
+            Assert.Equal(expected, intelligence.GetBoardWithDecisonExecuted(board));
+        }
+
+        [Fact]
+        public void TestGetBoardWithDecisonExecutedBeginning()
+        {
+            Board board = Board.GetBasicBoard();
+            board.PositionAt(1, 1).Status = Status.PlayerOne;
+
+            Board expected = board.Clone();
+            expected.PositionAt(2, 2).Status = Status.PlayerTwo;
+
+            SimpleArtificialIntelligence intelligence = new SimpleArtificialIntelligence(Status.PlayerTwo);
+
+            Assert.Equal(expected, intelligence.GetBoardWithDecisonExecuted(board));
         }
 
         [Fact]

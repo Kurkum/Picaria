@@ -24,7 +24,18 @@ namespace PicariaWebApp.Models
             {550, 2}
         };
 
-        public void TranslatePosition()
+        public void TranslateToInnerSystem()
+        {
+            this.X = XPositionToRealPosition
+                .FirstOrDefault(x => x.Value == this.X)
+                .Key;
+            this.Y = YPositionToRealPosition
+                .FirstOrDefault(x => x.Value == this.Y)
+                .Key;
+            
+        }
+
+        public void TranslateFromInnerSystem()
         {
             this.X = XPositionToRealPosition[this.X];
             this.Y = YPositionToRealPosition[this.Y];
