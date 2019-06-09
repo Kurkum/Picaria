@@ -17,19 +17,19 @@ namespace PicariaWebApp.Requests.AiMove
     {
         public async Task<List<Position>> Handle(Query request, CancellationToken cancellationToken)
         {
-            /*List<Position> firstMove = request.Board;
+            List<Position> firstMove = request.Board;
             for (int i = 0; i < 9; i++)
             {
-                Console.WriteLine(request.Board[i]);
+                //Console.WriteLine(request.Board[i]);
                 firstMove[i].Status = Status.FreeToCapture;
             }
             firstMove[4].Status = Status.PlayerOne;
-            /*
+            
             if (request.Board == firstMove)
             {
-                Console.WriteLine("\n\n\n\n\n\n\n\nWESZŁO\n\n\n\n\n\n\n\n");
+                //Console.WriteLine("\n\n\n\n\n\n\n\nWESZŁO\n\n\n\n\n\n\n\n");
                 request.Board[0].Status = Status.PlayerTwo;
-                foreach (Position position in firstMove)
+                foreach (Position position in request.Board)
                 {
                     position.TranslateToInnerSystem();
                 }
