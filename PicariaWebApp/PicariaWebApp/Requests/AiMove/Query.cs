@@ -17,6 +17,36 @@ namespace PicariaWebApp.Requests.AiMove
     {
         public async Task<List<Position>> Handle(Query request, CancellationToken cancellationToken)
         {
+            Player.GameTree gameTree = new Player.GameTree(new Board(request.Board), Status.PlayerTwo, 3, 0);
+            gameTree.Expand();
+
+            Player.Rating rating = new Player.Rating();
+            rating.AlfaBeta(gameTree);
+
+            Player.GameTree bestChildren = gameTree.Children[0];
+
+            
+            for (int c = 0; c < gameTree.Children.Count(); c++)
+            {
+                if (gameTree.Children[c].Rate > bestChildren.Rate)
+                {
+                    bestChildren = gameTree.Children[c];
+                }
+            }
+
+
+            foreach (Position position in bestChildren.BoardState.Positions)
+            {
+                position.TranslateToInnerSystem();
+            }
+            return bestChildren.BoardState.Positions;
+
+
+           
+
+
+            /*
+
             SimpleArtificialIntelligence intelligence = new SimpleArtificialIntelligence(Status.PlayerTwo);
             Board gotBoard = new Board(request.Board);
             Board board = intelligence.GetBoardWithDecisonExecuted(gotBoard);
@@ -29,6 +59,7 @@ namespace PicariaWebApp.Requests.AiMove
             request.Board = board.Positions;
 
             return request.Board;
+            /**/
         }
 
         private void SettingUpPawns(List<Position> board)

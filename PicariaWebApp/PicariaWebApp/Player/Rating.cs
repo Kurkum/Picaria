@@ -107,7 +107,11 @@ namespace PicariaWebApp.Player
                 jeśli ma dzieci, wykonaj dla każdego, potem dobierz swoją ocenę
                 jeśli nie ma, oceń boardRatem*/
 
-            int howMany = tree.Children.Count();
+            int howMany = 0;
+            if (!(tree.Children is null))
+            {
+                howMany = tree.Children.Count();//on jest nulem!!!!! jeśli ostatnie pokolenie to jest nulem!
+            }                                   //albo ustawiać na puste, albo sprawdzać czy null
             if (howMany > 0)
             {
 
@@ -121,15 +125,26 @@ namespace PicariaWebApp.Player
                 //jeśli ma dzieci, wykonaj dla każdego, potem dobierz swoją ocenę (wtedy już dzieci miały oceny)
                 else
                 {
+                    
+
+
                     for (int c = 0; c < howMany; c++)
                     {
+
                         AlfaBeta(tree.Children[c]);
+                        Console.WriteLine("\n\n\n\n\n\n\n\nn\n\n\n\n" + c + "\n\n\n\n\n\n\n\n\n\n");
                     }
+
+
+
 
                     //dobierz swoją ocenę
                     if (tree.CurrentDepth % 2 == 0)
                     {//pierwszy ruch mój, więc wybieram najlepsze dziecko
                         int newRate = -50;//początkowo najniższa ocena
+
+
+
                         for (int c = 0; c < tree.Children.Count(); c++)
                         {
                             if (tree.Children[c].Rate > newRate)
@@ -137,11 +152,17 @@ namespace PicariaWebApp.Player
                                 newRate = tree.Children[c].Rate;
                             }
                         }
+
+
+
                         tree.Rate = newRate;
                     }
                     else if (tree.CurrentDepth % 2 == 1)
                     {//pierwszy ruch wroga, więc najgorsze dziecko
                         int newRate = 50;//początkowo najwyższa ocena
+
+
+
                         for (int c = 0; c < tree.Children.Count(); c++)
                         {
                             if (tree.Children[c].Rate < newRate)
@@ -149,6 +170,9 @@ namespace PicariaWebApp.Player
                                 newRate = tree.Children[c].Rate;
                             }
                         }
+
+
+
                         tree.Rate = newRate;
                     }
                 }
