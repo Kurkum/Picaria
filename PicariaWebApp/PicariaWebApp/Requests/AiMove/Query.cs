@@ -18,10 +18,6 @@ namespace PicariaWebApp.Requests.AiMove
         public async Task<List<Position>> Handle(Query request, CancellationToken cancellationToken)
         {
             List<Position> firstMove = Board.GetEmptyBoard();
-            foreach (Position position in request.Board)
-            {
-                position.TranslateFromInnerSystem();
-            }
             for (int i = 0; i < 9; i++)
             {
                 firstMove[i].Status = Status.FreeToCapture;
@@ -42,10 +38,6 @@ namespace PicariaWebApp.Requests.AiMove
             {
                 //Console.WriteLine("\n\n\n\n\n\n\n\nWESZŁO\n\n\n\n\n\n\n\n");
                 firstMove[0].Status = Status.PlayerTwo;
-                foreach (Position position in firstMove)
-                {
-                    position.TranslateToInnerSystem();
-                }
                 return firstMove;
             }/**/
 
@@ -69,11 +61,6 @@ namespace PicariaWebApp.Requests.AiMove
                 }
             }
 
-
-            foreach (Position position in bestChildren.BoardState.Positions)
-            {
-                position.TranslateToInnerSystem();
-            }
             return bestChildren.BoardState.Positions;
 
 

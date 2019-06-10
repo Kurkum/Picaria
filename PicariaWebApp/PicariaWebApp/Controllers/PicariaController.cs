@@ -17,16 +17,19 @@ namespace PicariaWebApp.Controllers
 
         public async Task<IActionResult> Move([FromBody]List<Position> board, CancellationToken token)
         {
+            foreach(var pos in board)
+            {
+                pos.TranslateFromInnerSystem();
+            }
+
             var query = new Requests.AiMove.Query() { Board = board };
             var result = await Mediator.Send(query, token);
-
             var gameResult = GameResultChecker.CheckGameResult(new Board(result));
 
             foreach(var pos in result)
             {
                 pos.TranslateToInnerSystem();
             }
-
             return new JsonResult(new {
                 Game = result,
                 GameResult = gameResult
