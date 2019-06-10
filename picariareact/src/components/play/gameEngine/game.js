@@ -104,7 +104,6 @@ export class PicariaEngine {
 			}
 		} else {
 			if (dot.pos.status == PositionStatus.PlayerOne) {
-				debugger;
 				this.selectedPawn = dot;
 			}
 			if (dot.pos.status == PositionStatus.FreeToCapture && this.selectedPawn != null) {
