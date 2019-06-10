@@ -57,11 +57,6 @@ namespace PicariaWebApp.Models
 
         public Board(List<Position> positions)
         {
-            foreach (var position in positions)
-            {
-                position.TranslateFromInnerSystem();
-            }
-
             Positions = positions;
             Rules = new StandardRules();
         }
