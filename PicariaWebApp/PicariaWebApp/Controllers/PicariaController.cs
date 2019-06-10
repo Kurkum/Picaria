@@ -20,7 +20,17 @@ namespace PicariaWebApp.Controllers
             var query = new Requests.AiMove.Query() { Board = board };
             var result = await Mediator.Send(query, token);
 
-            return new JsonResult(result);
+            var gameResult = GameResultChecker.CheckGameResult(new Board(result));
+
+            foreach(var pos in result)
+            {
+                pos.TranslateToInnerSystem();
+            }
+
+            return new JsonResult(new {
+                Game = result,
+                GameResult = gameResult
+            });
         }
     }
 

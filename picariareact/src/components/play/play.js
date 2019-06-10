@@ -8,7 +8,11 @@ export default class play extends Component {
 		super(props);
 		this.pixiContainer = null;
 		this.app = new PIXI.Application(800, 600, { backgroundColor: 0xffffff });
-		this.engine = new PicariaEngine();
+		this.engine = new PicariaEngine(this.endGame);
+	}
+
+	endGame = (message) => {
+		console.log(message);
 	}
 
 	updatePixiContainer = (element) => {

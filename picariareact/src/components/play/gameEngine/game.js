@@ -9,7 +9,8 @@ const colors = {
 
 const gameStates = {
 	PawnSetup: 'pawnsetup',
-	PawnMovement: 'pawnmovement'
+	PawnMovement: 'pawnmovement',
+	GameEnded: 'gameneded'
 };
 
 const players = {
@@ -46,8 +47,14 @@ const YFromLogicPosition = {
 	550: 2
 };
 
+const gameResult = {
+	0: "You won",
+	1: "You lost",
+	2: "Game in progress"
+};
 export class PicariaEngine {
-	constructor() {
+	constructor(endGame) {
+		this.endGame = endGame;
 		this.GameState = gameStates.PawnSetup;
 		this.CurrentMove = players.PlayerOne;
 		this.MoveStatus = moveStates.PickingPawn;
@@ -83,7 +90,8 @@ export class PicariaEngine {
 	}
 
 	PawnClick = (e) => {
-		if (this.CurrentMove == players.PlayerTwo) {
+		debugger;
+		if (this.CurrentMove == players.PlayerTwo || this.GameState == gameStates.GameEnded) {
 			return;
 		}
 
@@ -149,7 +157,7 @@ export class PicariaEngine {
 		axios
 			.post('https://localhost:5001/api/Picaria/Move', JSON.stringify(this.Positions), { headers: headers })
 			.then((response) => {
-				response.data.forEach((position) => {
+				response.data.game.forEach((position) => {
 					var dot = this.dots.find((dot) => dot.pos.x == position.x && dot.pos.y == position.y);
 					dot.pos.status =
 						position.status == 0
@@ -171,7 +179,13 @@ export class PicariaEngine {
 				if (this.Positions.filter((x) => x.status == PositionStatus.PlayerOne).length === 3) {
 					this.GameState = gameStates.PawnMovement;
 				}
+
 				this.CurrentMove = players.PlayerOne;
+
+				if (response.data.gameResult !== 2) {
+					this.endGame(gameResult[response.data.gameResult]);
+					this.GameState = gameStates.GameEnded;
+				}
 			});
 	};
 }
