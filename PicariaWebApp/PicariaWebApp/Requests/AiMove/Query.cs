@@ -17,7 +17,7 @@ namespace PicariaWebApp.Requests.AiMove
     {
         public async Task<List<Position>> Handle(Query request, CancellationToken cancellationToken)
         {
-            List<Position> firstMove = request.Board;
+            /*List<Position> firstMove = request.Board;
             foreach (Position position in firstMove)
             {
                 position.TranslateFromInnerSystem();
