@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using PicariaWebApp.Models;
+using PicariaWebApp.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +17,75 @@ namespace PicariaWebApp.Requests.AiMove
     {
         public async Task<List<Position>> Handle(Query request, CancellationToken cancellationToken)
         {
-            if(request.Board.Count(x=>x.Status == Status.PlayerTwo) == 3)
+            /*List<Position> firstMove = request.Board;
+            foreach (Position position in firstMove)
             {
-                MovingPawns(request.Board);
+                position.TranslateFromInnerSystem();
             }
-            else
+            for (int i = 0; i < 9; i++)
             {
-                SettingUpPawns(request.Board);
+                //Console.WriteLine(request.Board[i]);
+                firstMove[i].Status = Status.FreeToCapture;
+            }
+            firstMove[4].Status = Status.PlayerOne;
+            
+            if (request.Board == firstMove)
+            {
+                //Console.WriteLine("\n\n\n\n\n\n\n\nWESZŁO\n\n\n\n\n\n\n\n");
+                firstMove[0].Status = Status.PlayerTwo;
+                foreach (Position position in firstMove)
+                {
+                    position.TranslateToInnerSystem();
+                }
+                return firstMove;
+            }/**/
+
+
+
+
+            Player.GameTree gameTree = new Player.GameTree(new Board(request.Board), Status.PlayerTwo, 4, 0);
+            gameTree.Expand();
+
+            Player.Rating rating = new Player.Rating();
+            rating.AlfaBeta(gameTree);
+
+            Player.GameTree bestChildren = gameTree.Children[0];
+
+
+            for (int c = 0; c < gameTree.Children.Count(); c++)
+            {
+                if (gameTree.Children[c].Rate > bestChildren.Rate)
+                {
+                    bestChildren = gameTree.Children[c];
+                }
             }
 
+
+            foreach (Position position in bestChildren.BoardState.Positions)
+            {
+                position.TranslateToInnerSystem();
+            }
+            return bestChildren.BoardState.Positions;
+
+
+
+
+
+            /*
+
+            SimpleArtificialIntelligence intelligence = new SimpleArtificialIntelligence(Status.PlayerTwo);
+            Board gotBoard = new Board(request.Board);
+            Board board = intelligence.GetBoardWithDecisonExecuted(gotBoard);
+            Console.WriteLine(board);
+            foreach (Position position in board.Positions)
+            {
+                position.TranslateToInnerSystem();
+            }
+            Console.WriteLine(board);
+            request.Board = board.Positions;
+
             return request.Board;
+            /**/
         }
 
         private void SettingUpPawns(List<Position> board)

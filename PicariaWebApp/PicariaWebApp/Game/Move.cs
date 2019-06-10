@@ -46,5 +46,10 @@ namespace PicariaWebApp.Game
                 return true;
             }
         }
+
+        public override string ToString()
+        {
+            return OldPosition.ToString() + NewPosition.ToString();
+        }
     }
 }

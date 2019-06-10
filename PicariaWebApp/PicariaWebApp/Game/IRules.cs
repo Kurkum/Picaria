@@ -10,5 +10,6 @@ namespace PicariaWebApp.Game
     {
         List<Position> GetPossibleMovesOfPawn(Board board, Position pawnPostion);
         List<Move> GetPossibleMovesOfPlayer(Board board, Status player);
+        List<Move> SecondPhaseGetPossibleMoves(Board board, Status player);//for tests
     }
 }

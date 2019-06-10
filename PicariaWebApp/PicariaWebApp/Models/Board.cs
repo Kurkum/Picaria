@@ -57,12 +57,13 @@ namespace PicariaWebApp.Models
 
         public Board(List<Position> positions)
         {
-            foreach(var position in positions)
+            foreach (var position in positions)
             {
-                position.TranslatePosition();
+                position.TranslateFromInnerSystem();
             }
 
             Positions = positions;
+            Rules = new StandardRules();
         }
 
         public void ExecuteMove(Move move)
@@ -79,11 +80,11 @@ namespace PicariaWebApp.Models
         }
 
         public Board GetCopyOfBoardWithMoveExecuted(Move move)
-        {            
+        {
             Board board = new Board();
             if (move.OldPosition.HasSameCoordinates(move.NewPosition))
             {
-                foreach(Position position in Positions)
+                foreach (Position position in Positions)
                 {
                     if (position.HasSameCoordinates(move.OldPosition))
                     {
@@ -100,7 +101,7 @@ namespace PicariaWebApp.Models
             Position newPosition = move.NewPosition.Clone();
             newPosition.Status = oldPosition.Status;
             oldPosition.Status = Status.FreeToCapture;
-            foreach(Position position in Positions)
+            foreach (Position position in Positions)
             {
                 if (position.HasSameCoordinates(oldPosition))
                 {
@@ -110,7 +111,8 @@ namespace PicariaWebApp.Models
                 {
                     board.Positions.Add(newPosition);
                 }
-                else {
+                else
+                {
                     board.Positions.Add(position.Clone());
                 }
             }
@@ -120,7 +122,7 @@ namespace PicariaWebApp.Models
         public int CountCapturedPositions()
         {
             int result = 0;
-            foreach(Position position in Positions)
+            foreach (Position position in Positions)
             {
                 if (position.Status != Status.FreeToCapture)
                 {
@@ -133,17 +135,45 @@ namespace PicariaWebApp.Models
         public override bool Equals(object obj)
         {
             Board that = obj as Board;
-            if(this.Positions.Count != that.Positions.Count)
+            if (this.Positions.Count != that.Positions.Count)
             {
                 return false;
             }
-            for(int i = 0; i < this.Positions.Count; ++i)
+            for (int i = 0; i < this.Positions.Count; ++i)
             {
-                if (!this.Positions[i].Equals(that.Positions[i])){
+                if (!this.Positions[i].Equals(that.Positions[i]))
+                {
                     return false;
                 }
             }
             return true;
+        }
+
+        public Position PositionAt(int x, int y)
+        {
+            return Positions.ElementAt(y * 3 + x);
+        }
+
+        public Board Clone()
+        {
+            Board other = (Board)this.MemberwiseClone();
+            other.Positions = new List<Position>();
+            foreach (Position position in Positions)
+            {
+                other.Positions.Add(position.Clone());
+            }
+            return other;
+        }
+
+        public override string ToString()
+        {
+            string result = "{";
+            foreach (Position position in Positions)
+            {
+                result += position.ToString();
+            }
+            result += ")";
+            return result;
         }
     }
 }
