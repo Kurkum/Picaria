@@ -22,12 +22,49 @@ const moveStates = {
 	MovingPawn: 'movingpawn'
 };
 
+const XToLogicPosition = {
+	50: 0,
+	400: 1,
+	750: 2
+};
+
+const XFromLogicPosition = {
+	0: 50,
+	1: 400,
+	2: 750
+};
+
+const YToLogicPosition = {
+	50: 0,
+	300: 1,
+	550: 2
+};
+
+const YFromLogicPosition = {
+	0: 50,
+	300: 1,
+	550: 2
+};
+
 export class PicariaEngine {
 	constructor() {
 		this.GameState = gameStates.PawnSetup;
 		this.CurrentMove = players.PlayerOne;
 		this.MoveStatus = moveStates.PickingPawn;
 	}
+
+	getPossibleMovesOfPaw = (board, pawnPosition) => {
+		var ret = [];
+		board.forEach(e => {
+			if (e.status == PositionStatus.FreeToCapture && (e.x == pawnPosition.x || e.x == pawnPosition.x - 1 || e.x == pawnPosition.x + 1) &&
+				(e.y == pawnPosition.y || e.y == pawnPosition.y - 1 || e.y == pawnPosition.y + 1)) {
+				ret.push(e);
+			}
+		});
+
+		return ret;
+	}
+
 
 	Positions = [
 		new Position(50, 50, PositionStatus.FreeToCapture),
@@ -63,9 +100,11 @@ export class PicariaEngine {
 				this.selectedPawn = dot;
 			}
 			if (dot.pos.status == PositionStatus.FreeToCapture && this.selectedPawn != null) {
-				this.selectedPawn.pos.status = PositionStatus.FreeToCapture;
-				dot.pos.status = PositionStatus.PlayerOne;
-				validMoveCompleted = true;
+				if (this.isMoveValid(this.selectedPawn.pos, dot.pos)) {
+					this.selectedPawn.pos.status = PositionStatus.FreeToCapture;
+					dot.pos.status = PositionStatus.PlayerOne;
+					validMoveCompleted = true;
+				}
 			}
 		}
 
@@ -74,6 +113,27 @@ export class PicariaEngine {
 			this.GetAiMove();
 		}
 	};
+
+	isMoveValid(fromPosition, toPosition) {
+		var mappedBoard = this.dots.map(function (el) {
+			return {
+				status: el.pos.status,
+				x: XToLogicPosition[el.pos.x],
+				y: YToLogicPosition[el.pos.y]
+			}
+		});
+
+		var possibleMoves = this.getPossibleMovesOfPaw(mappedBoard, {
+			status: fromPosition.status,
+			x: XToLogicPosition[fromPosition.x],
+			y: YToLogicPosition[fromPosition.y]
+		})
+
+		var isMoveValid = possibleMoves.filter(pos => pos.x === XToLogicPosition[toPosition.x] && pos.y === YToLogicPosition[toPosition.y])
+
+		return isMoveValid.length === 1;
+	}
+
 
 	drawCircle = (dot, color) => {
 		dot.clear();
