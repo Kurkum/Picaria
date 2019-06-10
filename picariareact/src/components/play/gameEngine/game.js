@@ -90,7 +90,6 @@ export class PicariaEngine {
 	}
 
 	PawnClick = (e) => {
-		debugger;
 		if (this.CurrentMove == players.PlayerTwo || this.GameState == gameStates.GameEnded) {
 			return;
 		}
@@ -105,6 +104,7 @@ export class PicariaEngine {
 			}
 		} else {
 			if (dot.pos.status == PositionStatus.PlayerOne) {
+				debugger;
 				this.selectedPawn = dot;
 			}
 			if (dot.pos.status == PositionStatus.FreeToCapture && this.selectedPawn != null) {
@@ -112,6 +112,7 @@ export class PicariaEngine {
 					this.selectedPawn.pos.status = PositionStatus.FreeToCapture;
 					dot.pos.status = PositionStatus.PlayerOne;
 					validMoveCompleted = true;
+					this.selectedPawn = null;
 				}
 			}
 		}
