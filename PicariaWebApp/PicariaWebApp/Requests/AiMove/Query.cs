@@ -17,6 +17,8 @@ namespace PicariaWebApp.Requests.AiMove
     {
         public async Task<List<Position>> Handle(Query request, CancellationToken cancellationToken)
         {
+
+//Jak zadziała, to weź to tutaj w jakiegoś if-a, np. zliczającego puste pola w request i jeśli >3 to sprawdź to niżej dla początku rozgrywki
             List<Position> firstMove = Board.GetEmptyBoard();
             for (int i = 0; i < 9; i++)
             {
@@ -40,6 +42,29 @@ namespace PicariaWebApp.Requests.AiMove
                 firstMove[0].Status = Status.PlayerTwo;
                 return firstMove;
             }/**/
+
+
+            firstMove[0].Status = Status.PlayerTwo;
+            firstMove[8].Status = Status.PlayerOne;
+
+            areEqual = true;
+
+
+            for (var i = 0; i < request.Board.Count; i++)
+            {
+                if (firstMove[i].Status != request.Board[i].Status)
+                {
+                    areEqual = false;
+                }
+            }
+
+            if (areEqual)
+            {
+                //Console.WriteLine("\n\n\n\n\n\n\n\nWESZŁO\n\n\n\n\n\n\n\n");
+                firstMove[5].Status = Status.PlayerTwo;
+                return firstMove;
+            }/**/
+
 
 
 
