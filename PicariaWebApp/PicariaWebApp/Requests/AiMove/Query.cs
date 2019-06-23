@@ -17,15 +17,13 @@ namespace PicariaWebApp.Requests.AiMove
     {
         public async Task<List<Position>> Handle(Query request, CancellationToken cancellationToken)
         {
-
-//Jak zadziała, to weź to tutaj w jakiegoś if-a, np. zliczającego puste pola w request i jeśli >3 to sprawdź to niżej dla początku rozgrywki
+        //Ew. poniższe weź w jakiegoś if-a, np. zliczającego puste pola w request i jeśli >3 to sprawdź
             List<Position> firstMove = Board.GetEmptyBoard();
             for (int i = 0; i < 9; i++)
             {
                 firstMove[i].Status = Status.FreeToCapture;
             }
             firstMove[4].Status = Status.PlayerOne;
-
 
             var areEqual = true;
             for(var i = 0; i < request.Board.Count; i++)
@@ -35,20 +33,16 @@ namespace PicariaWebApp.Requests.AiMove
                     areEqual = false;
                 }
             }
-
             if (areEqual)
             {
-                //Console.WriteLine("\n\n\n\n\n\n\n\nWESZŁO\n\n\n\n\n\n\n\n");
                 firstMove[0].Status = Status.PlayerTwo;
                 return firstMove;
-            }/**/
+            }
 
 
             firstMove[0].Status = Status.PlayerTwo;
             firstMove[8].Status = Status.PlayerOne;
-
             areEqual = true;
-
 
             for (var i = 0; i < request.Board.Count; i++)
             {
@@ -60,12 +54,9 @@ namespace PicariaWebApp.Requests.AiMove
 
             if (areEqual)
             {
-                //Console.WriteLine("\n\n\n\n\n\n\n\nWESZŁO\n\n\n\n\n\n\n\n");
                 firstMove[5].Status = Status.PlayerTwo;
                 return firstMove;
             }/**/
-
-
 
 
 
@@ -76,7 +67,6 @@ namespace PicariaWebApp.Requests.AiMove
             rating.AlfaBeta(gameTree);
 
             Player.GameTree bestChildren = gameTree.Children[0];
-
 
             for (int c = 0; c < gameTree.Children.Count(); c++)
             {
@@ -91,26 +81,6 @@ namespace PicariaWebApp.Requests.AiMove
             }
 
             return bestChildren.BoardState.Positions;
-
-
-
-
-
-            /*
-
-            SimpleArtificialIntelligence intelligence = new SimpleArtificialIntelligence(Status.PlayerTwo);
-            Board gotBoard = new Board(request.Board);
-            Board board = intelligence.GetBoardWithDecisonExecuted(gotBoard);
-            Console.WriteLine(board);
-            foreach (Position position in board.Positions)
-            {
-                position.TranslateToInnerSystem();
-            }
-            Console.WriteLine(board);
-            request.Board = board.Positions;
-
-            return request.Board;
-            /**/
         }
 
         private void SettingUpPawns(List<Position> board)
@@ -124,6 +94,5 @@ namespace PicariaWebApp.Requests.AiMove
             board.FirstOrDefault(x => x.Status == Status.PlayerTwo).Status = Status.FreeToCapture;
             newPosition.Status = Status.PlayerTwo;
         }
-
     }
 }

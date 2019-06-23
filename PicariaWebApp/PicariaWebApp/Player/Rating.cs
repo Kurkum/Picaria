@@ -9,10 +9,8 @@ namespace PicariaWebApp.Player
 {
     public class Rating
     {
-        //powinno działać, gdy mniej niż 3 pionki - poza pierwszym ruchem chyba i tylko gdy już po 3 pionki!
         public int RateBoard(Board board)
-        {  // lepszą techniką będzie tylko liczyć liczbę pól, na które mamy dostęp - bo często te "możliwości ruchu" poszczególnych pionków się pokrywają i niwelują swoją teoretyczną przewagę
-            //TEN PROBLEM ZAŁATWI ALFABETA: słaby punkt: patrz droga twoich testów, taki trochę niesprawiedliwy kill komputera
+        {  // teoretyczna przewaga leży w ilości możliwych do zajęcia pól możliwie wolnych w najbliższym czasie, lecz liczenie tego to jakieś szaleństwo
             List<Position> positions = board.Positions;
             if (positions.Count() == 9)
             {
@@ -31,13 +29,12 @@ namespace PicariaWebApp.Player
                     }
                 }
 
-                //if przegrana - kolejność tych ifów z returnami bardzo ważna - mówi o hierarchii
-                //podwójny if - żeby nie próbował odpalić tego drugiego warunku?
+                //if przegrana 
                 if (player.Count() == 3)
-                {//one zawsze będą wystarczająco po kolei
+                {
                     if (player[0].X - player[1].X == player[1].X - player[2].X &&
-                                   player[0].Y - player[1].Y == player[1].Y - player[2].Y)
-                    {//warunek linii
+                                   player[0].Y - player[1].Y == player[1].Y - player[2].Y)  // warunek przegranej linii, ich kolejność jest zawsze automatycznie poprawna
+                    {
                         return -50;
                     }
                 }
@@ -46,7 +43,7 @@ namespace PicariaWebApp.Player
                 if (computer.Count() == 3)
                 {
                     if (computer[0].X - computer[1].X == computer[1].X - computer[2].X &&
-                                   computer[0].Y - computer[1].Y == computer[1].Y - computer[2].Y)
+                                   computer[0].Y - computer[1].Y == computer[1].Y - computer[2].Y)  // warunek zwycięskiej linii, ich kolejność jest zawsze automatycznie poprawna
                     {
                         return 50;
                     }
@@ -54,7 +51,7 @@ namespace PicariaWebApp.Player
 
                 int anotherResult = 0;
 
-                //podliczanie pustej wartości pojedynczych pól
+                //podliczanie sumy wartości zajętych pól
                 for (int c = 0; c < positions.Count(); c++)
                 {
                     if (c == 0 || c == 2 || c == 6 || c == 8)
@@ -94,104 +91,92 @@ namespace PicariaWebApp.Player
                 return anotherResult;
 
             }
-            return -90;//błąd -> podana tablica jest za mała, najlepiej jej nie używać, najniższa ocena i najlepiej wyrzuć gdzieś exception
+            return -90;  // błąd -> podana tablica jest za mała. Najniższa ocena - najlepiej nie używać tablicy.
         }
-
 
 
         public void AlfaBeta(GameTree tree)
         {
-
-            /*dla każdego zrób:
-                jeśli wygrana, oceń na 2 i wyczyść "dzieci"
-                jeśli ma dzieci, wykonaj dla każdego, potem dobierz swoją ocenę
+            /*dla każdego:
+                jeśli wygrana lub przegrana, od razu oceń i wyczyść "dzieci" - jest to znaczący element
+                jeśli ma dzieci, wykonaj dla każdego, potem dobierz swoją ocenę, tudzież usuń zbędne dzieci
                 jeśli nie ma, oceń boardRatem*/
 
             int howMany = 0;
-            if (!(tree.Children is null))
+            if (!(tree.Children is null))  // Ostatnie pokolenie - .Children = NULL
             {
-                howMany = tree.Children.Count();//on jest nulem!!!!! jeśli ostatnie pokolenie to jest nulem!
-            }                                   //albo ustawiać na puste, albo sprawdzać czy null
+                howMany = tree.Children.Count();
+            }                                   
             if (howMany > 0)
             {
-                ////////////////////////////////////////////////////////////Później do wycięcia jeśli wejdą odpowiednie cięcia
-                //jeśli jest zwycięzcą, nadaj ocenę i wyczyść dzieci
-                if (tree.CurrentDepth % 2 == 1 && RateBoard(tree.BoardState) == 50 && tree.CurrentDepth!=0)
-                {//ten kod i tak musiałby być wykonany w znacznej większości
+                // Specjalne odcięcia pozwalają na wyeliminowanie poważnego problemu oprzez usunięcie zbędnych możliwości. Sprawdź: środek, prawy dolny, prawy górny, prawy górny w lewo
+                // jeśli jest zwycięzcą, nadaj ocenę i wyczyść dzieci
+                if (tree.CurrentDepth % 2 == 1 && RateBoard(tree.BoardState) == 50 && tree.CurrentDepth != 0)
+                {
                     tree.Rate = 50;
-                    tree.Children.Clear();//ODCIĘCIE
+                    tree.Children.Clear();  // ODCIĘCIE SPECJALNE
                 }
-
                 else if (tree.CurrentDepth % 2 == 0 && RateBoard(tree.BoardState) == -50 && tree.CurrentDepth != 0)
-                {//ten kod i tak musiałby być wykonany w znacznej większości
+                {
                     tree.Rate = -50;
-                    tree.Children.Clear();//ODCIĘCIE
-                }
-                ////////////////////////////////////////////////////////////////////////
+                    tree.Children.Clear();  // ODCIĘCIE SPECJALNE
+                } 
 
 
-
-                //jeśli ma dzieci, wykonaj dla każdego, potem dobierz swoją ocenę (wtedy już dzieci miały oceny)
+                // jeśli ma dzieci, wykonaj dla każdego, potem dobierz swoją ocenę (wtedy już dzieci będą miały swoje oceny)
                 else
                 {
-
-
-
                     for (int c = 0; c < howMany; c++)
                     {
-
                         AlfaBeta(tree.Children[c]);
-                        //Console.WriteLine("\n\n\n\n\n\n\n\nn\n\n\n\n" + c + "\n\n\n\n\n\n\n\n\n\n");
                     }
 
-
-
-
-                    //dobierz swoją ocenę
-                    if (tree.CurrentDepth % 2 == 0)
-                    {//pierwszy ruch mój, więc wybieram najlepsze dziecko
-                        int newRate = -50;//początkowo najniższa ocena
-
-
+                    // dobierz swoją ocenę
+                    if (tree.CurrentDepth % 2 == 0)  // pierwszy ruch mój, więc wybieram najlepsze dziecko
+                    {
+                        int newRate = -50;  // początkowo najniższa ocena
 
                         for (int c = 0; c < tree.Children.Count(); c++)
                         {
-                            if (tree.Children[c].Rate > newRate)//////////////////////////////////tu można wrzucić to sprawdzanie, czy ten stan do osiągnięcia w jednym ruchu
+                            if (tree.Children[c].Rate >= newRate)
                             {
                                 newRate = tree.Children[c].Rate;
                             }
+                            else  // równych NIE należy usuwać: 1. błąd pustej listy. 2. Mogą się jeszcze przydać np. przy sprawdzaniu, który jest szybszy
+                            {
+                                tree.Children.Remove(tree.Children[c]);
+                                c--;
+                            }
                         }
-
-
-
                         tree.Rate = newRate;
                     }
-                    else if (tree.CurrentDepth % 2 == 1)
-                    {//pierwszy ruch wroga, więc najgorsze dziecko
-                        int newRate = 50;//początkowo najwyższa ocena
-
-
+                    else if (tree.CurrentDepth % 2 == 1)  // pierwszy ruch wroga, więc najgorsze dziecko
+                    {
+                        int newRate = 50;  // początkowo najwyższa ocena
 
                         for (int c = 0; c < tree.Children.Count(); c++)
                         {
-                            if (tree.Children[c].Rate < newRate)
+                            if (tree.Children[c].Rate <= newRate)
                             {
                                 newRate = tree.Children[c].Rate;
                             }
+                            else  // równych NIE należy usuwać: 1. błąd pustej listy. 2. Mogą się jeszcze przydać np. przy sprawdzaniu, który jest szybszy
+                            {
+                                tree.Children.Remove(tree.Children[c]);
+                                c--;
+                            }
                         }
-
-
 
                         tree.Rate = newRate;
                     }
                 }
 
             }
-            //jeśli nie ma dzieci, oceń BoardRatem
+            // jeśli nie ma dzieci, oceń BoardRatem
             else
             {
                 tree.Rate = RateBoard(tree.BoardState);
             }
         }
     }
-}//https://www.youtube.com/watch?v=wXv2uACAAnM
+}
