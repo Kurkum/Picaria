@@ -114,7 +114,7 @@ namespace PicariaWebApp.Player
             }                                   //albo ustawiać na puste, albo sprawdzać czy null
             if (howMany > 0)
             {
-
+                ////////////////////////////////////////////////////////////Później do wycięcia jeśli wejdą odpowiednie cięcia
                 //jeśli jest zwycięzcą, nadaj ocenę i wyczyść dzieci
                 if (tree.CurrentDepth % 2 == 1 && RateBoard(tree.BoardState) == 50 && tree.CurrentDepth!=0)
                 {//ten kod i tak musiałby być wykonany w znacznej większości
@@ -127,6 +127,8 @@ namespace PicariaWebApp.Player
                     tree.Rate = -50;
                     tree.Children.Clear();//ODCIĘCIE
                 }
+                ////////////////////////////////////////////////////////////////////////
+
 
 
                 //jeśli ma dzieci, wykonaj dla każdego, potem dobierz swoją ocenę (wtedy już dzieci miały oceny)
@@ -154,7 +156,7 @@ namespace PicariaWebApp.Player
 
                         for (int c = 0; c < tree.Children.Count(); c++)
                         {
-                            if (tree.Children[c].Rate > newRate)
+                            if (tree.Children[c].Rate > newRate)//////////////////////////////////tu można wrzucić to sprawdzanie, czy ten stan do osiągnięcia w jednym ruchu
                             {
                                 newRate = tree.Children[c].Rate;
                             }
