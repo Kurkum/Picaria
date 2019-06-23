@@ -84,6 +84,10 @@ namespace PicariaWebApp.Requests.AiMove
                 {
                     bestChildren = gameTree.Children[c];
                 }
+                else if(gameTree.Children[c].Rate == bestChildren.Rate && rating.RateBoard(gameTree.Children[c].BoardState) > rating.RateBoard(bestChildren.BoardState))
+                {
+                    bestChildren = gameTree.Children[c];
+                }
             }
 
             return bestChildren.BoardState.Positions;
