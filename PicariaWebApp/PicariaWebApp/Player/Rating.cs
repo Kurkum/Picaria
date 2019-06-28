@@ -95,7 +95,7 @@ namespace PicariaWebApp.Player
         }
 
 
-        public void AlfaBeta(GameTree tree)
+        public void MiniMaks(GameTree tree)
         {
             /*dla każdego:
                 jeśli wygrana lub przegrana, od razu oceń i wyczyść "dzieci" - jest to znaczący element
@@ -128,7 +128,7 @@ namespace PicariaWebApp.Player
                 {
                     for (int c = 0; c < howMany; c++)
                     {
-                        AlfaBeta(tree.Children[c]);
+                        MiniMaks(tree.Children[c]);
                     }
 
                     // dobierz swoją ocenę

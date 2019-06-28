@@ -64,7 +64,7 @@ namespace PicariaWebApp.Requests.AiMove
             gameTree.Expand();
 
             Player.Rating rating = new Player.Rating();
-            rating.AlfaBeta(gameTree);
+            rating.MiniMaks(gameTree);
 
             Player.GameTree bestChildren = gameTree.Children[0];
 
