@@ -17,7 +17,6 @@ namespace PicariaWebApp.Requests.AiMove
     {
         public async Task<List<Position>> Handle(Query request, CancellationToken cancellationToken)
         {
-        //Ew. poniższe weź w jakiegoś if-a, np. zliczającego puste pola w request i jeśli >3 to sprawdź
             List<Position> firstMove = Board.GetEmptyBoard();
             for (int i = 0; i < 9; i++)
             {

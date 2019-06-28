@@ -10,7 +10,7 @@ namespace PicariaWebApp.Player
     public class Rating
     {
         public int RateBoard(Board board)
-        {  // teoretyczna przewaga leży w ilości możliwych do zajęcia pól możliwie wolnych w najbliższym czasie, lecz liczenie tego to jakieś szaleństwo
+        {  
             List<Position> positions = board.Positions;
             if (positions.Count() == 9)
             {
@@ -29,21 +29,19 @@ namespace PicariaWebApp.Player
                     }
                 }
 
-                //if przegrana 
                 if (player.Count() == 3)
                 {
                     if (player[0].X - player[1].X == player[1].X - player[2].X &&
-                                   player[0].Y - player[1].Y == player[1].Y - player[2].Y)  // warunek przegranej linii, ich kolejność jest zawsze automatycznie poprawna
+                                   player[0].Y - player[1].Y == player[1].Y - player[2].Y)  
                     {
                         return -50;
                     }
                 }
 
-                //if wygrana
                 if (computer.Count() == 3)
                 {
                     if (computer[0].X - computer[1].X == computer[1].X - computer[2].X &&
-                                   computer[0].Y - computer[1].Y == computer[1].Y - computer[2].Y)  // warunek zwycięskiej linii, ich kolejność jest zawsze automatycznie poprawna
+                                   computer[0].Y - computer[1].Y == computer[1].Y - computer[2].Y)  
                     {
                         return 50;
                     }
@@ -51,7 +49,6 @@ namespace PicariaWebApp.Player
 
                 int anotherResult = 0;
 
-                //podliczanie sumy wartości zajętych pól
                 for (int c = 0; c < positions.Count(); c++)
                 {
                     if (c == 0 || c == 2 || c == 6 || c == 8)
@@ -91,39 +88,30 @@ namespace PicariaWebApp.Player
                 return anotherResult;
 
             }
-            return -90;  // błąd -> podana tablica jest za mała. Najniższa ocena - najlepiej nie używać tablicy.
+            return -90;  // błąd -> podana tablica jest za mała. Najniższa ocena - należy unikać używania takiej tablicy.
         }
 
 
         public void MiniMaks(GameTree tree)
         {
-            /*dla każdego:
-                jeśli wygrana lub przegrana, od razu oceń i wyczyść "dzieci" - jest to znaczący element
-                jeśli ma dzieci, wykonaj dla każdego, potem dobierz swoją ocenę, tudzież usuń zbędne dzieci
-                jeśli nie ma, oceń boardRatem*/
-
             int howMany = 0;
-            if (!(tree.Children is null))  // Ostatnie pokolenie - .Children = NULL
+            if (!(tree.Children is null)) 
             {
                 howMany = tree.Children.Count();
             }                                   
             if (howMany > 0)
             {
-                // Specjalne odcięcia pozwalają na wyeliminowanie poważnego problemu oprzez usunięcie zbędnych możliwości. Sprawdź: środek, prawy dolny, prawy górny, prawy górny w lewo
-                // jeśli jest zwycięzcą, nadaj ocenę i wyczyść dzieci
                 if (tree.CurrentDepth % 2 == 1 && RateBoard(tree.BoardState) == 50 && tree.CurrentDepth != 0)
                 {
                     tree.Rate = 50;
-                    tree.Children.Clear();  // ODCIĘCIE SPECJALNE
+                    tree.Children.Clear();  
                 }
                 else if (tree.CurrentDepth % 2 == 0 && RateBoard(tree.BoardState) == -50 && tree.CurrentDepth != 0)
                 {
                     tree.Rate = -50;
-                    tree.Children.Clear();  // ODCIĘCIE SPECJALNE
+                    tree.Children.Clear(); 
                 } 
 
-
-                // jeśli ma dzieci, wykonaj dla każdego, potem dobierz swoją ocenę (wtedy już dzieci będą miały swoje oceny)
                 else
                 {
                     for (int c = 0; c < howMany; c++)
@@ -131,10 +119,9 @@ namespace PicariaWebApp.Player
                         MiniMaks(tree.Children[c]);
                     }
 
-                    // dobierz swoją ocenę
-                    if (tree.CurrentDepth % 2 == 0)  // pierwszy ruch mój, więc wybieram najlepsze dziecko
+                    if (tree.CurrentDepth % 2 == 0)
                     {
-                        int newRate = -50;  // początkowo najniższa ocena
+                        int newRate = -50;
 
                         for (int c = 0; c < tree.Children.Count(); c++)
                         {
@@ -142,7 +129,7 @@ namespace PicariaWebApp.Player
                             {
                                 newRate = tree.Children[c].Rate;
                             }
-                            else  // równych NIE należy usuwać: 1. błąd pustej listy. 2. Mogą się jeszcze przydać np. przy sprawdzaniu, który jest szybszy
+                            else
                             {
                                 tree.Children.Remove(tree.Children[c]);
                                 c--;
@@ -150,9 +137,9 @@ namespace PicariaWebApp.Player
                         }
                         tree.Rate = newRate;
                     }
-                    else if (tree.CurrentDepth % 2 == 1)  // pierwszy ruch wroga, więc najgorsze dziecko
+                    else if (tree.CurrentDepth % 2 == 1)
                     {
-                        int newRate = 50;  // początkowo najwyższa ocena
+                        int newRate = 50;
 
                         for (int c = 0; c < tree.Children.Count(); c++)
                         {
@@ -160,7 +147,7 @@ namespace PicariaWebApp.Player
                             {
                                 newRate = tree.Children[c].Rate;
                             }
-                            else  // równych NIE należy usuwać: 1. błąd pustej listy. 2. Mogą się jeszcze przydać np. przy sprawdzaniu, który jest szybszy
+                            else
                             {
                                 tree.Children.Remove(tree.Children[c]);
                                 c--;
@@ -172,7 +159,6 @@ namespace PicariaWebApp.Player
                 }
 
             }
-            // jeśli nie ma dzieci, oceń BoardRatem
             else
             {
                 tree.Rate = RateBoard(tree.BoardState);
